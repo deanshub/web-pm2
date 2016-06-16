@@ -1,0 +1,79 @@
+{
+  "name": "web-pm2",
+  "version": "0.0.1",
+  "description": "PM2 Web interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "web-pm2",
+    "build": "NODE_ENV=production webpack --progress --colors"
+  },
+  "bin": {
+    "web-pm2": "web-pm2.bat"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deanshub/web-pm2"
+  },
+  "keywords": [
+    "web-pm2",
+    "PM2",
+    "PM2 ui",
+    "PM2 monitor",
+    "PM2 web",
+    "monitor",
+    "node manager",
+    "process manager",
+    "PM2 interface",
+    "PM2 gui",
+    "PM2 dashboard",
+    "PM2 WINDOWS MONITOR",
+    "PM2 WINDOWS"
+  ],
+  "dependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-runtime": "^6.9.2",
+    "chart.js": "^2.1.6",
+    "classnames": "^2.2.5",
+    "css-loader": "^0.23.1",
+    "express": "^4.13.4",
+    "file-loader": "^0.8.5",
+    "json-loader": "^0.5.4",
+    "material-ui": "^0.15.0",
+    "node-sass": "^3.7.0",
+    "postcss-loader": "^0.9.1",
+    "q": "^1.4.1",
+    "react": "^15.1.0",
+    "react-chartjs": "git://github.com/jhudson8/react-chartjs.git#chartjs-v2",
+    "react-dom": "^15.1.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.1",
+    "react-router-redux": "^4.0.5",
+    "react-tap-event-plugin": "^1.0.0",
+    "redux": "^3.5.2",
+    "redux-actions": "^0.10.0",
+    "rucksack-css": "^0.8.6",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "superagent": "^2.0.0",
+    "webpack": "^1.13.1"
+  },
+  "author": {
+    "name": "Dean Shub"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deanshub/web-pm2/issues"
+  },
+  "homepage": "https://github.com/deanshub/web-pm2",
+  "devDependencies": {
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.12.0",
+    "eslint-plugin-react": "^5.1.1"
+  }
+}
