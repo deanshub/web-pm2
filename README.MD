@@ -2,6 +2,8 @@ web-pm2
 =======
 PM2 Web interface.
 
+![Image of web-pm2](http://image.prntscr.com/image/7e4503813c5e4d8fb119daf8cf56c76b.png)
+
 ### TODOS
 - [ ] system actions should be on the app bar.
 - [x] refresh should be on the app bar.
