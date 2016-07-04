@@ -1,8 +1,9 @@
 var express = require('express');
 var os=require('os');
-// var Q = require('q');
 var pm2=require('pm2');
 var path = require('path');
+
+var utils = require('./utils');
 
 var app = express();
 var PORT = process.env.port||3666;
@@ -110,7 +111,6 @@ app.get('/api/operations/kill',function(request,response){
 });
 
 app.use('/', express.static(path.join(__dirname,'static')));
-// app.use('/', express.static(path.join(__dirname,'web')));
-
+utils.startup();
 app.listen(PORT);
 console.log('listening on:  http://localhost:3666/');

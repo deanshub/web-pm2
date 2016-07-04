@@ -29,10 +29,12 @@ class App extends Component {
     request.get('/api/serverStat')
     .set('Accept', 'application/json')
     .end((err, res)=>{
-      console.log(res.body);
-      this.setState({
-        stat: res.body,
-      });
+      console.log(res?res.body:err);
+      if (!err){
+        this.setState({
+          stat: res.body,
+        });
+      }
     });
   }
   render() {
@@ -44,10 +46,10 @@ class App extends Component {
       <div>
         <Navbar
             refreshStats={::this.refreshStats}
-            title={params.userId} 
+            title={params.userId}
         />
         <div className={classnames([style.mainsection])}>
-          {React.cloneElement(children, { refreshStats: this.refreshStats, stat })}
+          {React.cloneElement(children, { refreshStats: ::this.refreshStats, stat })}
         </div>
       </div>
     );

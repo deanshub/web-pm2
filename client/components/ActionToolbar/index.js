@@ -26,8 +26,8 @@ const sytemActions = [
 
 class ActionToolbar extends Component {
   static propTypes = {
-    refreshStats: PropTypes.func,
     handleSearch: PropTypes.func,
+    refreshStats: PropTypes.func,
     rowSelected: PropTypes.object,
   }
 
@@ -67,13 +67,13 @@ class ActionToolbar extends Component {
     if (url){
       request.get(url)
       .end(()=>{
-        this.props.refreshStats();
+        setTimeout(this.props.refreshStats);
       });
     }
   }
 
   render() {
-    const { rowSelected, refreshStats, handleSearch } = this.props;
+    const { rowSelected, handleSearch } = this.props;
     const { openMenu, anchorEl } = this.state;
 
     return (
@@ -109,7 +109,7 @@ class ActionToolbar extends Component {
           </IconButton>
 
           <ToolbarSeparator />
-          
+
           <RaisedButton
               icon={<NavigationExpandMoreIcon />}
               label="System Actions"
