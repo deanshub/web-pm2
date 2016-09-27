@@ -1,6 +1,6 @@
 {
   "name": "web-pm2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PM2 Web interface",
   "main": "index.js",
   "scripts": {
@@ -49,6 +49,7 @@
     "material-ui": "^0.15.0",
     "moment": "^2.14.0",
     "node-sass": "^3.7.0",
+    "pm2": "^2.0.15",
     "postcss-loader": "^0.9.1",
     "q": "^1.4.1",
     "react": "^15.1.0",

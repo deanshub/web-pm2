@@ -1,16 +1,16 @@
-var express = require('express');
-var os=require('os');
-var pm2=require('pm2');
-var path = require('path');
+const express = require('express');
+const os=require('os');
+const path = require('path');
 
-var utils = require('./utils');
+const utils = require('./common/utils');
+const pm2wrapper = require('./common/pm2wrapper');
 
-var app = express();
-var PORT = process.env.port||3666;
+const app = express();
+const PORT = process.env.port||3666;
 
 //Information
-app.get('/api/serverStat',function(req,res){
-  var _stat={
+app.get('/api/serverStat',(req,res)=>{
+  let stats={
     system_info:{
       hostName:os.hostname(),
       uptime:os.uptime(),
@@ -31,86 +31,91 @@ app.get('/api/serverStat',function(req,res){
     loadAvg:os.loadavg(),
 
   };
-  pm2.connect(function(){
-    pm2.list(function(err,list){
-      pm2.disconnect();
-      _stat.processes=list;
-      res.json(_stat);
+  pm2wrapper.list().then((list)=>{
+    const externalProcesses = utils.getExternalProcesses();
+    const statusPromises = Object.keys(externalProcesses).map(name=>externalProcesses[name].status());
+    Promise.all(statusPromises).then((statuses)=>{
+      const outerProcesses = Object.keys(externalProcesses).map((name, index)=>{
+        return {
+          name,
+          pm_id: undefined,
+          pm2_env: {
+            exec_mode:undefined,
+            status:statuses[index],
+            pm_uptime:undefined,
+            created_at:undefined,
+            restart_time:undefined,
+            unstable_restarts:undefined,
+          },
+          pid: undefined,
+          monit: {
+            memory:undefined,
+            cpu: undefined,
+          },
+        };
+      });
+      stats.processes=list.concat(outerProcesses);
+      res.json(stats);
     });
   });
 });
 
 //Operations
-app.get('/api/operations/stop/:id',function(request,response){
-  if(!request.params.id){
-    response.send(400 ,{
+app.get('/api/operations/stop/:id',(req,res)=>{
+  if(!req.params.id){
+    res.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
-  pm2.connect(function(){
-    pm2.stop(request.params.id,function(err,details){
-      if(err){
-        console.log(err);
-        response.send(err);
-      }else
-        response.send(details);
-      pm2.disconnect();
-    });
+  pm2wrapper.stop(req.params.id)
+  .then(res.send)
+  .catch((err)=>{
+    res.status(400).send(err);
   });
 });
 
-app.get('/api/operations/restart/:id',function(request,response){
-  if(!request.params.id){
-    response.send(400 ,{
+app.get('/api/operations/restart/:id',(req,res)=>{
+  if(!req.params.id){
+    res.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
-  pm2.connect(function(){
-    pm2.restart(request.params.id,function(err,details){
-      if(err){
-        console.log(err);
-        response.send(err);
-      }else
-        response.send(details);
-      pm2.disconnect();
-    });
+  pm2wrapper.restart(req.params.id)
+  .then(res.send)
+  .catch((err)=>{
+    res.status(400).send(err);
   });
 });
 
-app.get('/api/operations/delete/:id',function(request,response){
-  if(!request.params.id){
-    response.send(400 ,{
+app.get('/api/operations/delete/:id',(req,res)=>{
+  if(!req.params.id){
+    res.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
-  pm2.connect(function(){
-    pm2.delete(request.params.id,function(err,status){
-      if(err){
-        console.log(err);
-        response.send(err);
-      }else
-        response.send(status);
-      pm2.disconnect();
-    });
+  pm2wrapper.delete(req.params.id)
+  .then(res.send)
+  .catch((err)=>{
+    res.status(400).send(err);
   });
 });
 
-app.get('/api/operations/kill',function(request,response){
-  pm2.connect(function(){
-    pm2.killDaemon(function(err,status){
-      if(err){
-        console.log(err);
-        response.send(err);
-      }else
-        response.send(status);
-    });
+app.get('/api/operations/kill',function(req,res){
+  pm2wrapper.kill()
+  .then(res.send)
+  .catch((err)=>{
+    res.status(400).send(err);
   });
 });
 
 app.use('/', express.static(path.join(__dirname,'static')));
-utils.startup();
+
+utils.loadExtraProcesses().then(()=>{
+  utils.startup();
+});
+
 app.listen(PORT);
 console.log('listening on:  http://localhost:3666/');

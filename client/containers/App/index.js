@@ -2,9 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import request from 'superagent';
 
-// import { bindActionCreators } from 'redux'
-// import { connect } from 'react-redux'
-
 import Navbar from '../../components/Navbar';
 import style from './style.css';
 
@@ -56,20 +53,4 @@ class App extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     ...state.routing.locationBeforeTransitions.state,
-//   }
-// }
-//
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(TodoActions, dispatch),
-//   }
-// }
-//
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(App)
 export default App;

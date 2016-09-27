@@ -78,3 +78,8 @@ of web-pm2
 - [x] uptime in the table should be fixed.
 - [x] created on in the table should be fixed.
 - [x] implement search logic by app name, pm2 id, pid.
+- [ ] control processes out of pm2 reach.
+- [ ] process dependency handling.
+- [ ] configuration manager for processes.
+- [ ] versioning of processes to show app on main screen (+its own).
+- [ ] more abilities of processes through plugins.
