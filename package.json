@@ -7,7 +7,7 @@
     "test": "web-pm2",
     "server": "node index.js",
     "start": "webpack --progress --colors && node index.js",
-    "dev": "webpack --progress --colors && nodemon index.js",
+    "dev": "concurrently \"webpack --progress --colors --watch\" \"nodemon index.js\"",
     "build": "NODE_ENV=production webpack --progress --colors"
   },
   "bin": {
@@ -43,6 +43,7 @@
     "babel-runtime": "^6.9.2",
     "chart.js": "^2.1.6",
     "classnames": "^2.2.5",
+    "concurrently": "^3.0.0",
     "config": "^1.21.0",
     "css-loader": "^0.23.1",
     "express": "^4.13.4",

@@ -1,8 +1,8 @@
 const express = require('express');
-const os=require('os');
 const path = require('path');
 
 const utils = require('./common/utils');
+const processController = require('./common/processController');
 const pm2wrapper = require('./common/pm2wrapper');
 
 const app = express();
@@ -10,53 +10,14 @@ const PORT = process.env.port||3666;
 
 //Information
 app.get('/api/serverStat',(req,res)=>{
-  let stats={
-    system_info:{
-      hostName:os.hostname(),
-      uptime:os.uptime(),
-    },
-    monit:{
-      loadavg:os.loadavg(),
-      total_mem:os.totalmem(),
-      free_mem:os.freemem(),
-      cpu:os.cpus(),
-      interfaces:os.networkInterfaces(),
-    },
-    os:{
-      type:os.type(),
-      platform:os.platform(),
-      release:os.release(),
-    },
-    cpu_arch:os.arch(),
-    loadAvg:os.loadavg(),
-
-  };
-  pm2wrapper.list().then((list)=>{
-    const externalProcesses = utils.getExternalProcesses();
-    const statusPromises = Object.keys(externalProcesses).map(name=>externalProcesses[name].status());
-    Promise.all(statusPromises).then((statuses)=>{
-      const outerProcesses = Object.keys(externalProcesses).map((name, index)=>{
-        return {
-          name,
-          pm_id: undefined,
-          pm2_env: {
-            exec_mode:undefined,
-            status:statuses[index],
-            pm_uptime:undefined,
-            created_at:undefined,
-            restart_time:undefined,
-            unstable_restarts:undefined,
-          },
-          pid: undefined,
-          monit: {
-            memory:undefined,
-            cpu: undefined,
-          },
-        };
-      });
-      stats.processes=list.concat(outerProcesses);
-      res.json(stats);
-    });
+  processController.list()
+  .then((stats)=>{
+    res.json(stats);
+  })
+  .catch((err)=>{
+    console.log(2);
+    console.error(err);
+    res.status(400).send(err);
   });
 });
 
@@ -68,9 +29,12 @@ app.get('/api/operations/stop/:id',(req,res)=>{
     });
     return;
   }
-  pm2wrapper.stop(req.params.id)
-  .then(res.send)
+  processController.stop(req.params.id)
+  .then((stats)=>{
+    res.json(stats);
+  })
   .catch((err)=>{
+    console.error(err);
     res.status(400).send(err);
   });
 });
@@ -82,9 +46,12 @@ app.get('/api/operations/restart/:id',(req,res)=>{
     });
     return;
   }
-  pm2wrapper.restart(req.params.id)
-  .then(res.send)
+  processController.restart(req.params.id)
+  .then((stats)=>{
+    res.json(stats);
+  })
   .catch((err)=>{
+    console.error(err);
     res.status(400).send(err);
   });
 });
@@ -96,17 +63,23 @@ app.get('/api/operations/delete/:id',(req,res)=>{
     });
     return;
   }
-  pm2wrapper.delete(req.params.id)
-  .then(res.send)
+  processController.delete(req.params.id)
+  .then((stats)=>{
+    res.json(stats);
+  })
   .catch((err)=>{
+    console.error(err);
     res.status(400).send(err);
   });
 });
 
-app.get('/api/operations/kill',function(req,res){
+app.get('/api/operations/kill', (req,res)=>{
   pm2wrapper.kill()
-  .then(res.send)
+  .then((stats)=>{
+    res.json(stats);
+  })
   .catch((err)=>{
+    console.error(err);
     res.status(400).send(err);
   });
 });
@@ -118,4 +91,4 @@ utils.loadExtraProcesses().then(()=>{
 });
 
 app.listen(PORT);
-console.log('listening on:  http://localhost:3666/');
+console.log(`listening on:  http://localhost:${PORT}/`);

@@ -30,9 +30,9 @@ module.exports = {
       child_process.exec('iisreset /status', (err, stdOut, stdErr) => {
         if(err) return reject(err);
         if (/World Wide Web Publishing[^:]*: Running/i.test(stdOut)){
-          return resolve('online');
+          return resolve({status:'online'});
         }else if (/World Wide Web Publishing[^:]*: Stopped/i.test(stdOut)){
-          return resolve('stopped');
+          return resolve({status:'stopped'});
         }else{
           return reject({stdOut, stdErr});
         }
