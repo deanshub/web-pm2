@@ -2085,9 +2085,6 @@ webpackJsonp([1],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import { bindActionCreators } from 'redux'
-	// import { connect } from 'react-redux'
-
 	var App = function (_Component) {
 	  (0, _inherits3.default)(App, _Component);
 
@@ -2147,24 +2144,6 @@ webpackJsonp([1],[
 	  }]);
 	  return App;
 	}(_react.Component);
-
-	// function mapStateToProps(state) {
-	//   return {
-	//     ...state.routing.locationBeforeTransitions.state,
-	//   }
-	// }
-	//
-	// function mapDispatchToProps(dispatch) {
-	//   return {
-	//     actions: bindActionCreators(TodoActions, dispatch),
-	//   }
-	// }
-	//
-	// export default connect(
-	//   mapStateToProps,
-	//   mapDispatchToProps
-	// )(App)
-
 
 	App.propTypes = {
 	  children: _react.PropTypes.object,
@@ -3085,7 +3064,7 @@ webpackJsonp([1],[
 	  title: _react.PropTypes.string
 	};
 	Navbar.defaultProps = {
-	  title: 'Sisense Process Monitor'
+	  title: 'Sisense Process Activity Monitor'
 	};
 	exports.default = Navbar;
 

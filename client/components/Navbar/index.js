@@ -18,7 +18,7 @@ class Navbar extends Component {
     title: PropTypes.string,
   };
   static defaultProps = {
-    title: 'Sisense Process Monitor',
+    title: 'Sisense Process Activity Monitor',
   };
 
   render() {
