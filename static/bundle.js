@@ -13146,6 +13146,10 @@ webpackJsonp([1],[
 	  value: true
 	});
 
+	var _keys = __webpack_require__(956);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
 	var _getPrototypeOf = __webpack_require__(335);
 
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -13202,7 +13206,13 @@ webpackJsonp([1],[
 
 	// import ActionSearch from 'material-ui/svg-icons/action/search';
 
-	var sytemActions = ['Start/Restart All', 'Stop All', 'Delete All', 'Kill PM2'];
+	var SYSTEM_ACTIONS = {
+	  RESTART_ALL: 'Start/Restart All',
+	  STOP_ALL: 'Stop All',
+	  DELETE_ALL: 'Delete All',
+	  KILL_PM2: 'Kill PM2'
+	};
+
 	// import classnames from 'classnames';
 	// import {Line as LineChart} from 'react-chartjs';
 	// import { bindActionCreators } from 'redux'
@@ -13245,14 +13255,15 @@ webpackJsonp([1],[
 	    value: function handleSystemAction(action, id) {
 	      var _this2 = this;
 
+	      console.log('id', id);
 	      var url = void 0;
-	      if (action === sytemActions[0]) {
+	      if (action === SYSTEM_ACTIONS.RESTART_ALL) {
 	        url = '/api/operations/restart/' + id;
-	      } else if (action === sytemActions[1]) {
+	      } else if (action === SYSTEM_ACTIONS.STOP_ALL) {
 	        url = '/api/operations/stop/' + id;
-	      } else if (action === sytemActions[2]) {
+	      } else if (action === SYSTEM_ACTIONS.DELETE_ALL) {
 	        url = '/api/operations/delete/' + id;
-	      } else if (action === sytemActions[3]) {
+	      } else if (action === SYSTEM_ACTIONS.KILL_PM2) {
 	        url = '/api/operations/kill';
 	      }
 
@@ -13275,6 +13286,8 @@ webpackJsonp([1],[
 	      var anchorEl = _state.anchorEl;
 
 
+	      var processId = rowSelected ? rowSelected.pm_id || rowSelected.name : undefined;
+
 	      return _react2.default.createElement(
 	        _Toolbar.Toolbar,
 	        null,
@@ -13286,7 +13299,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this3.handleSystemAction(sytemActions[1], rowSelected.pm_id);
+	                return _this3.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId);
 	              },
 	              tooltip: 'Stop'
 	            },
@@ -13297,7 +13310,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this3.handleSystemAction(sytemActions[0], rowSelected.pm_id);
+	                return _this3.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId);
 	              },
 	              tooltip: 'Restart'
 	            },
@@ -13308,7 +13321,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this3.handleSystemAction(sytemActions[2], rowSelected.pm_id);
+	                return _this3.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId);
 	              },
 	              tooltip: 'Delete'
 	            },
@@ -13319,7 +13332,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this3.handleSystemAction('Logs', rowSelected.pm_id);
+	                return _this3.handleSystemAction('Logs', processId);
 	              },
 	              tooltip: 'Logs'
 	            },
@@ -13343,10 +13356,14 @@ webpackJsonp([1],[
 	            _react2.default.createElement(
 	              _materialUi.Menu,
 	              null,
-	              sytemActions.map(function (action, index) {
-	                return _react2.default.createElement(_materialUi.MenuItem, { key: index, primaryText: action, onTouchTap: function onTouchTap() {
-	                    return _this3.handleSystemAction(action, 'all');
-	                  } });
+	              (0, _keys2.default)(SYSTEM_ACTIONS).map(function (actionName, index) {
+	                return _react2.default.createElement(_materialUi.MenuItem, {
+	                  key: index,
+	                  primaryText: SYSTEM_ACTIONS[actionName],
+	                  onTouchTap: function onTouchTap() {
+	                    return _this3.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all');
+	                  }
+	                });
 	              })
 	            )
 	          )
@@ -27981,6 +27998,33 @@ webpackJsonp([1],[
 		"details": "style__details___3q8pm",
 		"chartItem": "style__chartItem___2dU6W"
 	};
+
+/***/ },
+/* 956 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(957), __esModule: true };
+
+/***/ },
+/* 957 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(958);
+	module.exports = __webpack_require__(272).Object.keys;
+
+/***/ },
+/* 958 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(303)
+	  , $keys    = __webpack_require__(286);
+
+	__webpack_require__(338)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
 
 /***/ }
 ]);

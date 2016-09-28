@@ -37,7 +37,7 @@ module.exports={
           outer:true,
           pm_id: undefined,
           pm2_env: {
-            exec_mode:undefined,
+            exec_mode:'External Process',
             status:statuses[index].status,
             pm_uptime:undefined,
             created_at:undefined,
@@ -56,12 +56,27 @@ module.exports={
     });
   },
   stop:(id)=>{
-    return pm2wrapper.stop(id);
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id]){
+      return externalProcesses[id].stop();
+    }else{
+      return pm2wrapper.stop(id);
+    }
   },
   restart:(id)=>{
-    return pm2wrapper.restart(id);
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id]){
+      return externalProcesses[id].restart();
+    }else{
+      return pm2wrapper.restart(id);
+    }
   },
   delete:(id)=>{
-    return pm2wrapper.delete(id);
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id]){
+      return externalProcesses[id].delete();
+    }else{
+      return pm2wrapper.delete(id);
+    }
   },
 };

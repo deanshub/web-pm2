@@ -11,12 +11,13 @@ import request from 'superagent';
 // import ActionSearch from 'material-ui/svg-icons/action/search';
 
 
-const sytemActions = [
-  'Start/Restart All',
-  'Stop All',
-  'Delete All',
-  'Kill PM2',
-];
+const SYSTEM_ACTIONS = {
+  RESTART_ALL:'Start/Restart All',
+  STOP_ALL:'Stop All',
+  DELETE_ALL:'Delete All',
+  KILL_PM2:'Kill PM2',
+};
+
 // import classnames from 'classnames';
 // import {Line as LineChart} from 'react-chartjs';
 // import { bindActionCreators } from 'redux'
@@ -53,14 +54,15 @@ class ActionToolbar extends Component {
   }
 
   handleSystemAction(action, id){
+    console.log('id',id);
     let url;
-    if (action===sytemActions[0]){
+    if (action===SYSTEM_ACTIONS.RESTART_ALL){
       url = `/api/operations/restart/${id}`;
-    }else if (action===sytemActions[1]){
+    }else if (action===SYSTEM_ACTIONS.STOP_ALL){
       url = `/api/operations/stop/${id}`;
-    }else if (action===sytemActions[2]){
+    }else if (action===SYSTEM_ACTIONS.DELETE_ALL){
       url = `/api/operations/delete/${id}`;
-    }else if (action===sytemActions[3]){
+    }else if (action===SYSTEM_ACTIONS.KILL_PM2){
       url = '/api/operations/kill';
     }
 
@@ -76,33 +78,35 @@ class ActionToolbar extends Component {
     const { rowSelected, handleSearch } = this.props;
     const { openMenu, anchorEl } = this.state;
 
+    const processId = rowSelected ? (rowSelected.pm_id||rowSelected.name) : undefined;
+
     return (
       <Toolbar>
         <ToolbarGroup>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.handleSystemAction(sytemActions[1], rowSelected.pm_id)}
+              onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId)}
               tooltip="Stop"
           >
             <AvStop />
           </IconButton>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.handleSystemAction(sytemActions[0], rowSelected.pm_id)}
+              onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId)}
               tooltip="Restart"
           >
             <AvReplay />
           </IconButton>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.handleSystemAction(sytemActions[2], rowSelected.pm_id)}
+              onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId)}
               tooltip="Delete"
           >
             <ActionsDelete />
           </IconButton>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.handleSystemAction('Logs', rowSelected.pm_id)}
+              onTouchTap={()=>this.handleSystemAction('Logs', processId)}
               tooltip="Logs"
           >
             <InsertDriveFile />
@@ -124,7 +128,14 @@ class ActionToolbar extends Component {
           >
             <Menu>
               {
-                sytemActions.map((action,index)=><MenuItem key={index} primaryText={action} onTouchTap={()=>this.handleSystemAction(action, 'all')} />)
+                Object.keys(SYSTEM_ACTIONS).map(
+                  (actionName,index)=>
+                    <MenuItem
+                      key={index}
+                      primaryText={SYSTEM_ACTIONS[actionName]}
+                      onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all')}
+                    />
+                  )
               }
             </Menu>
           </Popover>
