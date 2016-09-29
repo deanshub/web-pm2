@@ -14,6 +14,19 @@ module.exports={
       });
     });
   },
+  restart:(id) => {
+    return new Promise((resolve, reject)=>{
+      pm2.connect(()=>{
+        pm2.start(id, (err, details)=>{
+          pm2.disconnect();
+          if(err){
+            return reject(err);
+          }
+          return resolve(details);
+        });
+      });
+    });
+  },
   stop:(id) => {
     return new Promise((resolve, reject)=>{
       pm2.connect(()=>{

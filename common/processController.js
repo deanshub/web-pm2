@@ -55,6 +55,14 @@ module.exports={
       return stats;
     });
   },
+  start:(id)=>{
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id]){
+      return externalProcesses[id].start();
+    }else{
+      return pm2wrapper.start(id);
+    }
+  },
   stop:(id)=>{
     const externalProcesses = utils.getExternalProcesses();
     if (externalProcesses[id]){
