@@ -3,10 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import classnames from 'classnames';
 
 import dateFilter from '../../utils/dateFilter';
-import durationFilter from '../../utils/durationFilter';
 import style from './style.css';
-// import { bindActionCreators } from 'redux'
-// import { connect } from 'react-redux'
 
 class ProcessTable extends Component {
   static propTypes = {
@@ -71,10 +68,9 @@ class ProcessTable extends Component {
                 [style.online]:process.pm2_env.status==='online',
                 [style.notonline]:process.pm2_env.status!=='online',
               });
-
               return (
                 <TableRow
-                    key={process.pm_id}
+                    key={process.name}
                     selected={index===selectedRow}
                 >
                   <TableRowColumn>{process.pm_id}</TableRowColumn>

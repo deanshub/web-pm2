@@ -40,7 +40,7 @@ class GeneralToolbar extends Component {
 
   render() {
     const { rowSelected } = this.props;
-
+    
     return (
       <Toolbar>
         <ToolbarGroup>
