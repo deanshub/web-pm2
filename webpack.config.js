@@ -63,6 +63,10 @@ module.exports = {
         loader: 'json',
       },
       {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file',
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader:'babel',

@@ -78,4 +78,17 @@ module.exports={
       });
     });
   },
+  describe:(id) => {
+    return new Promise((resolve, reject)=>{
+      pm2.connect(()=>{
+        pm2.describe(id, (err, details)=>{
+          pm2.disconnect();
+          if(err){
+            return reject(err);
+          }
+          return resolve(details);
+        });
+      });
+    });
+  },
 };
