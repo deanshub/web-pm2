@@ -29,7 +29,12 @@ module.exports={
   list:()=>{
     let stats = getOsStats();
     const externalProcesses = utils.getExternalProcesses();
-    const statusPromises = Object.keys(externalProcesses).map(name=>externalProcesses[name].status());
+    const statusPromises = Object.keys(externalProcesses).map(name=>
+      externalProcesses[name].status().catch(err=>{
+        console.error(`error getting status of external process "${name}":`, err);
+        return {status:'unknown'};
+      })
+    );
     return Promise.all([pm2wrapper.list(), ...statusPromises]).then(([list, ...statuses])=>{
       const outerProcesses = Object.keys(externalProcesses).map((name, index)=>{
         return {

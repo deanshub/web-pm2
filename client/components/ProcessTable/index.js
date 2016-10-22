@@ -67,6 +67,7 @@ class ProcessTable extends Component {
               const statusClass = classnames({
                 [style.online]:process.pm2_env.status==='online',
                 [style.notonline]:process.pm2_env.status!=='online',
+                [style.capitalize]:true,
               });
               return (
                 <TableRow

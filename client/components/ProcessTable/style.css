@@ -4,3 +4,6 @@
 .online{
   color: #4CAF50;
 }
+.capitalize{
+  text-transform: capitalize;
+}
