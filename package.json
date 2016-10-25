@@ -7,7 +7,7 @@
     "test": "web-pm2",
     "server": "node index.js",
     "start": "webpack --progress --colors && node index.js",
-    "dev": "concurrently \"webpack --progress --colors --watch\" \"nodemon index.js\"",
+    "dev": "concurrently \"webpack -d --progress --colors --watch\" \"nodemon index.js\"",
     "build": "NODE_ENV=production webpack --progress --colors"
   },
   "bin": {

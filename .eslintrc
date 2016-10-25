@@ -41,7 +41,7 @@
     "prefer-spread": 1,
     "prefer-template": 1,
     "require-yield": 2,
-    "jsx-quotes": 1,
+    "react/jsx-quotes": 1,
     "react/forbid-prop-types": 1,
     "react/jsx-boolean-value": 1,
     "react/jsx-closing-bracket-location": 1,
