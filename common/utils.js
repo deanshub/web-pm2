@@ -29,7 +29,7 @@ const startup = () => {
         }else{
           return ()=>{
             console.log(`Starting ${process.name}`);
-            return Q.nfcall(processController.start, process);
+            return processController.start(process);
           };
         }
         return ()=>Q(undefined);
