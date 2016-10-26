@@ -62,6 +62,7 @@ class HomePage extends Component {
             />
             <ProcessTable
                 onRowSelection={::this.handleRowSelection}
+                selectedRow={rowSelected}
                 searchText={searchText}
                 {...stat}
             />

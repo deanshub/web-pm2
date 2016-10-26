@@ -1,6 +1,6 @@
 {
   "name": "web-pm2",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "PM2 Web interface",
   "main": "index.js",
   "scripts": {
@@ -83,6 +83,7 @@
   "devDependencies": {
     "babel-eslint": "^7.0.0",
     "eslint": "^3.6.1",
-    "eslint-plugin-react": "^6.4.1"
+    "eslint-plugin-react": "^6.4.1",
+    "why-did-you-update": "^0.0.8"
   }
 }

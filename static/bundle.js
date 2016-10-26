@@ -39,7 +39,11 @@ webpackJsonp([1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// whyDidYouUpdate(React);
+	
 	var store = (0, _store2.default)();
+	// import { whyDidYouUpdate } from 'why-did-you-update';
+	
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, store);
 	(0, _reactTapEventPlugin2.default)();
 	
@@ -7943,6 +7947,7 @@ webpackJsonp([1],[
 	            }),
 	            _react2.default.createElement(_ProcessTable2.default, (0, _extends3.default)({
 	              onRowSelection: this.handleRowSelection.bind(this),
+	              selectedRow: rowSelected,
 	              searchText: searchText
 	            }, stat))
 	          )
@@ -18603,29 +18608,20 @@ webpackJsonp([1],[
 	  }
 	
 	  (0, _createClass3.default)(ProcessTable, [{
-	    key: 'handleRowSelection',
-	    value: function handleRowSelection(rowIndex) {
-	      var _props = this.props,
-	          processes = _props.processes,
-	          onRowSelection = _props.onRowSelection;
-	
-	      onRowSelection(processes[rowIndex]);
-	      this.setState({
-	        selectedRow: rowIndex[0]
-	      });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props2 = this.props,
-	          processes = _props2.processes,
-	          searchText = _props2.searchText;
-	      var selectedRow = this.state.selectedRow;
+	      var _props = this.props,
+	          processes = _props.processes,
+	          searchText = _props.searchText,
+	          selectedRow = _props.selectedRow,
+	          _onRowSelection = _props.onRowSelection;
 	
 	
 	      return _react2.default.createElement(
 	        _Table.Table,
-	        { onRowSelection: this.handleRowSelection.bind(this) },
+	        { onRowSelection: function onRowSelection(rowIndex) {
+	            _onRowSelection(processes[rowIndex]);
+	          } },
 	        _react2.default.createElement(
 	          _Table.TableHeader,
 	          null,
@@ -18694,7 +18690,7 @@ webpackJsonp([1],[
 	          { showRowHover: true },
 	          processes.filter(function (process) {
 	            return process.name.includes(searchText) || process.pm_id.toString().includes(searchText);
-	          }).map(function (process, index) {
+	          }).map(function (process) {
 	            var _classnames;
 	
 	            var statusClass = (0, _classnames3.default)((_classnames = {}, (0, _defineProperty3.default)(_classnames, _style2.default.online, process.pm2_env.status === 'online'), (0, _defineProperty3.default)(_classnames, _style2.default.notonline, process.pm2_env.status !== 'online'), (0, _defineProperty3.default)(_classnames, _style2.default.capitalize, true), _classnames));
@@ -18702,7 +18698,7 @@ webpackJsonp([1],[
 	              _Table.TableRow,
 	              {
 	                key: process.name,
-	                selected: index === selectedRow
+	                selected: process === selectedRow
 	              },
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
@@ -18789,7 +18785,8 @@ webpackJsonp([1],[
 	ProcessTable.propTypes = {
 	  onRowSelection: _react.PropTypes.func,
 	  processes: _react.PropTypes.array,
-	  searchText: _react.PropTypes.string
+	  searchText: _react.PropTypes.string,
+	  selectedRow: _react.PropTypes.object
 	};
 	ProcessTable.defaultProps = {
 	  processes: [],

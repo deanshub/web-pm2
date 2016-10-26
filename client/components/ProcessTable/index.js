@@ -10,6 +10,7 @@ class ProcessTable extends Component {
     onRowSelection: PropTypes.func,
     processes: PropTypes.array,
     searchText: PropTypes.string,
+    selectedRow: PropTypes.object,
   }
 
   static defaultProps={
@@ -30,20 +31,11 @@ class ProcessTable extends Component {
     });
   }
 
-  handleRowSelection(rowIndex){
-    const { processes, onRowSelection } = this.props;
-    onRowSelection(processes[rowIndex]);
-    this.setState({
-      selectedRow: rowIndex[0],
-    });
-  }
-
   render() {
-    const { processes, searchText } = this.props;
-    const { selectedRow } = this.state;
+    const { processes, searchText, selectedRow, onRowSelection } = this.props;
 
     return (
-      <Table onRowSelection={::this.handleRowSelection}>
+      <Table onRowSelection={(rowIndex)=>{onRowSelection(processes[rowIndex]);}}>
         <TableHeader>
           <TableRow>
             <TableHeaderColumn>PM2 ID</TableHeaderColumn>
@@ -63,7 +55,7 @@ class ProcessTable extends Component {
           {
             processes
             .filter((process)=>process.name.includes(searchText)||process.pm_id.toString().includes(searchText))
-            .map((process, index)=>{
+            .map(process=>{
               const statusClass = classnames({
                 [style.online]:process.pm2_env.status==='online',
                 [style.notonline]:process.pm2_env.status!=='online',
@@ -72,7 +64,7 @@ class ProcessTable extends Component {
               return (
                 <TableRow
                     key={process.name}
-                    selected={index===selectedRow}
+                    selected={process===selectedRow}
                 >
                   <TableRowColumn>{process.pm_id}</TableRowColumn>
                   <TableRowColumn>{process.name}</TableRowColumn>

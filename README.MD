@@ -70,7 +70,7 @@ of web-pm2
 - [ ] system actions should be on the app bar.
 - [x] refresh should be on the app bar.
 - [ ] hide buttons when disabled.
-- [ ] enabling logs.
+- [x] enabling logs.
 - [x] search on the right end.
 - [x] left of it the system actions and the refresh.
 - [x] on the left end the process actions.
@@ -78,7 +78,7 @@ of web-pm2
 - [x] uptime in the table should be fixed.
 - [x] created on in the table should be fixed.
 - [x] implement search logic by app name, pm2 id, pid.
-- [ ] control processes out of pm2 reach.
+- [x] control processes out of pm2 reach.
 - [ ] process dependency handling.
 - [ ] configuration manager for processes.
 - [ ] versioning of processes to show app on main screen (+its own).
