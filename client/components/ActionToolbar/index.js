@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import { TextField, RaisedButton, MenuItem } from 'material-ui';
 import { Popover, Menu, IconButton } from 'material-ui';
-import FlatButton from 'material-ui/FlatButton';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import AvReplay from 'material-ui/svg-icons/av/replay';
@@ -121,29 +119,39 @@ class ActionToolbar extends Component {
       url = `/api/operations/delete/${id}`;
     }else if (action===SYSTEM_ACTIONS.KILL_PM2){
       url = '/api/operations/kill';
-    }else if (action==='Logs'){
-      url = `/api/operations/logs/${id}`;
     }
 
     if (url){
       request.get(url)
-      .end((err, res)=>{
-        if (action === 'Logs') {
-          this.setState({
-            dialogOpen: true,
-            logsDetails: res.body,
-          });
-        }
+      .end((err)=>{
+        console.error(err);
         setTimeout(this.props.refreshStats);
       });
     }
+  }
+
+  getLogs(processId){
+    const url = `/api/operations/logs/${processId}`;
+    request.get(url)
+    .end((err, res)=>{
+      this.setState({
+        dialogOpen: true,
+        logsDetails: res.body,
+      });
+      setTimeout(this.props.refreshStats);
+    });
   }
 
   render() {
     const { rowSelected, handleSearch } = this.props;
     const { openMenu, anchorEl, logsDetails, logText, dialogOpen } = this.state;
 
-    const processId = rowSelected ? (rowSelected.pm_id||rowSelected.name) : undefined;
+    let processId;
+    if (rowSelected && rowSelected.pm_id!==undefined){
+      processId = rowSelected.pm_id;
+    }else if (rowSelected && rowSelected.name!==undefined) {
+      processId = rowSelected.name;
+    }
 
     return (
       <Toolbar>
@@ -171,7 +179,7 @@ class ActionToolbar extends Component {
           </IconButton>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.handleSystemAction('Logs', processId)}
+              onTouchTap={()=>this.getLogs(processId)}
               tooltip="Logs"
           >
             <InsertDriveFile />
@@ -196,9 +204,9 @@ class ActionToolbar extends Component {
                 Object.keys(SYSTEM_ACTIONS).map(
                   (actionName,index)=>
                     <MenuItem
-                      key={index}
-                      primaryText={SYSTEM_ACTIONS[actionName]}
-                      onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all')}
+                        key={index}
+                        primaryText={SYSTEM_ACTIONS[actionName]}
+                        onTouchTap={()=>this.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all')}
                     />
                   )
               }
@@ -213,11 +221,11 @@ class ActionToolbar extends Component {
         </ToolbarGroup>
 
         <LogDialog
-          logsDetails={logsDetails}
-          logText={logText}
-          dialogOpen={dialogOpen}
-          handleClose={::this.handleClose}
-          showLog={::this.showLog}
+            dialogOpen={dialogOpen}
+            handleClose={::this.handleClose}
+            logText={logText}
+            logsDetails={logsDetails}
+            showLog={::this.showLog}
         />
       </Toolbar>
     );

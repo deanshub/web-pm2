@@ -39,4 +39,12 @@ module.exports = {
       });
     });
   },
+  describe: ()=>{
+    return new Promise(resolve=>{
+      return resolve([{
+        name: 'PrismWebServer',
+        path: 'C:/ProgramData/Sisense/PrismWeb/Logs/PrismWebServer.log',
+      }]);
+    });
+  },
 };

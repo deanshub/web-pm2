@@ -90,75 +90,73 @@ app.get('/api/operations/kill', (req,res)=>{
   });
 });
 
-app.get('/api/operations/logs/:id',function(request,response){
-  if(!request.params.id){
-    request.status(400).send({
+app.get('/api/operations/logs/:id', (req,res) => {
+  if(!req.params.id){
+    req.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
 
-  pm2wrapper.describe(request.params.id).then((procDetails) => {
-    var logsPaths = [];
-
-    logsPaths.push({
-      name: 'error',
-      path: procDetails[0].pm2_env.pm_err_log_path,
-    });
-    logsPaths.push({
-      name: 'out',
-      path: procDetails[0].pm2_env.pm_out_log_path,
-    });
-
-    var logsDetails = {
-      procId: request.params.id,
-      logsPaths,
-    };
-
-    response.send(logsDetails);
+  processController.describe(req.params.id).then(logsDetails=>{
+    console.log(logsDetails);
+    res.json(logsDetails);
   }).catch((err)=>{
     console.error(err);
-    response.status(400).send(err);
+    res.status(400).send(err);
   });
 });
 
-app.post('/api/operations/showlog',function(request,response){
-  var readStream = fileSystem.createReadStream(request.body.logpath);
-  readStream.pipe(response);
+app.post('/api/operations/showlog', (req,res)=>{
+  try{
+    var readStream = fileSystem.createReadStream(req.body.logpath);
+    readStream.pipe(res);
+  }catch(e){
+    console.error(`log "${req.body.logpath}" not found`);
+  }
 });
 
-app.get('/api/operations/showlog/:id/:logname',function(request,response){
-  let id = request.params.id;
-  let logname = request.params.logname;
+app.get('/api/operations/showlog/:id/:logname', (req,res)=>{
+  let id = req.params.id;
+  let logname = req.params.logname;
 
   if(!id){
-    request.status(400).send({
+    req.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
 
   if(!logname){
-    request.status(400).send({
+    req.status(400).send({
       error:'Logname not supplied',
     });
     return;
   }
 
-  pm2wrapper.describe(request.params.id).then((procDetails) => {
-    let logFilePath = '';
-
-    if (logname === 'out') {
-      logFilePath = procDetails[0].pm2_env.pm_out_log_path;
-    } else if (logname === 'error') {
-      logFilePath = procDetails[0].pm2_env.pm_err_log_path;
+  processController.describe(req.params.id).then(procsDetails=>{
+    const logs = procsDetails.logsPaths.filter(proc=>proc.name===logname);
+    if (logs.length>0){
+      const readStream = fileSystem.createReadStream(logs[0].path);
+      readStream.pipe(res);
+    }else{
+      console.error(`No log "${logname}" found on process "${id}"`);
+      throw `No log "${logname}" found on process "${id}"`;
     }
-
-    var readStream = fileSystem.createReadStream(logFilePath);
-    readStream.pipe(response);
+  // pm2wrapper.describe(req.params.id).then((procDetails) => {
+  //   let logFilePath = '';
+  //
+  //   if (logname === 'out') {
+  //     logFilePath = procDetails[0].pm2_env.pm_out_log_path;
+  //   } else if (logname === 'error') {
+  //     logFilePath = procDetails[0].pm2_env.pm_err_log_path;
+  //   }
+  //
+  //   var readStream = fileSystem.createReadStream(logFilePath);
+  //   readStream.pipe(res);
   }).catch((err)=>{
     console.error(err);
-    response.status(400).send(err);
+    res.status(400).send(err);
   });
 });
 

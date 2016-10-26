@@ -60,7 +60,7 @@ module.exports={
       return stats;
     });
   },
-  start:(id)=>{
+  start:id=>{
     const externalProcesses = utils.getExternalProcesses();
     if (externalProcesses[id]){
       return externalProcesses[id].start();
@@ -68,7 +68,7 @@ module.exports={
       return pm2wrapper.start(id);
     }
   },
-  stop:(id)=>{
+  stop:id=>{
     const externalProcesses = utils.getExternalProcesses();
     if (externalProcesses[id]){
       return externalProcesses[id].stop();
@@ -76,7 +76,7 @@ module.exports={
       return pm2wrapper.stop(id);
     }
   },
-  restart:(id)=>{
+  restart:id=>{
     const externalProcesses = utils.getExternalProcesses();
     if (externalProcesses[id]){
       return externalProcesses[id].restart();
@@ -84,12 +84,43 @@ module.exports={
       return pm2wrapper.restart(id);
     }
   },
-  delete:(id)=>{
+  delete:id=>{
     const externalProcesses = utils.getExternalProcesses();
     if (externalProcesses[id]){
       return externalProcesses[id].delete();
     }else{
       return pm2wrapper.delete(id);
+    }
+  },
+  describe:id=>{
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id]){
+      return externalProcesses[id].describe().catch(err=>{
+        console.error(`error getting described details of external process "${id}":`, err);
+        return [];
+      }).then(details=>{
+        return {
+          procId: id,
+          logsPaths: details,
+        };
+      });
+    }else{
+      return pm2wrapper.describe(id).then(procDetails => {
+        let logsPaths = [{
+          name: 'error',
+          path: procDetails[0].pm2_env.pm_err_log_path,
+        },{
+          name: 'out',
+          path: procDetails[0].pm2_env.pm_out_log_path,
+        }];
+
+        let logsDetails = {
+          procId: id,
+          logsPaths,
+        };
+
+        return logsDetails;
+      });
     }
   },
 };

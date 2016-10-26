@@ -8609,12 +8609,6 @@ webpackJsonp([1],[
 	
 	var _materialUi = __webpack_require__(/*! material-ui */ 534);
 	
-	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 641);
-	
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-	
-	var _Card = __webpack_require__(/*! material-ui/Card */ 615);
-	
 	var _expandMore = __webpack_require__(/*! material-ui/svg-icons/navigation/expand-more */ 607);
 	
 	var _expandMore2 = _interopRequireDefault(_expandMore);
@@ -8773,26 +8767,33 @@ webpackJsonp([1],[
 	        url = '/api/operations/delete/' + id;
 	      } else if (action === SYSTEM_ACTIONS.KILL_PM2) {
 	        url = '/api/operations/kill';
-	      } else if (action === 'Logs') {
-	        url = '/api/operations/logs/' + id;
 	      }
 	
 	      if (url) {
-	        _superagent2.default.get(url).end(function (err, res) {
-	          if (action === 'Logs') {
-	            _this3.setState({
-	              dialogOpen: true,
-	              logsDetails: res.body
-	            });
-	          }
+	        _superagent2.default.get(url).end(function (err) {
+	          console.error(err);
 	          setTimeout(_this3.props.refreshStats);
 	        });
 	      }
 	    }
 	  }, {
+	    key: 'getLogs',
+	    value: function getLogs(processId) {
+	      var _this4 = this;
+	
+	      var url = '/api/operations/logs/' + processId;
+	      _superagent2.default.get(url).end(function (err, res) {
+	        _this4.setState({
+	          dialogOpen: true,
+	          logsDetails: res.body
+	        });
+	        setTimeout(_this4.props.refreshStats);
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      var _props = this.props,
 	          rowSelected = _props.rowSelected,
@@ -8805,7 +8806,12 @@ webpackJsonp([1],[
 	          dialogOpen = _state.dialogOpen;
 	
 	
-	      var processId = rowSelected ? rowSelected.pm_id || rowSelected.name : undefined;
+	      var processId = void 0;
+	      if (rowSelected && rowSelected.pm_id !== undefined) {
+	        processId = rowSelected.pm_id;
+	      } else if (rowSelected && rowSelected.name !== undefined) {
+	        processId = rowSelected.name;
+	      }
 	
 	      return _react2.default.createElement(
 	        _Toolbar.Toolbar,
@@ -8818,7 +8824,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this4.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId);
+	                return _this5.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId);
 	              },
 	              tooltip: 'Stop'
 	            },
@@ -8829,7 +8835,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this4.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId);
+	                return _this5.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId);
 	              },
 	              tooltip: 'Restart'
 	            },
@@ -8840,7 +8846,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this4.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId);
+	                return _this5.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId);
 	              },
 	              tooltip: 'Delete'
 	            },
@@ -8851,7 +8857,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this4.handleSystemAction('Logs', processId);
+	                return _this5.getLogs(processId);
 	              },
 	              tooltip: 'Logs'
 	            },
@@ -8880,7 +8886,7 @@ webpackJsonp([1],[
 	                  key: index,
 	                  primaryText: SYSTEM_ACTIONS[actionName],
 	                  onTouchTap: function onTouchTap() {
-	                    return _this4.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all');
+	                    return _this5.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all');
 	                  }
 	                });
 	              })
@@ -8898,10 +8904,10 @@ webpackJsonp([1],[
 	          })
 	        ),
 	        _react2.default.createElement(_LogDialog2.default, {
-	          logsDetails: logsDetails,
-	          logText: logText,
 	          dialogOpen: dialogOpen,
 	          handleClose: this.handleClose.bind(this),
+	          logText: logText,
+	          logsDetails: logsDetails,
 	          showLog: this.showLog.bind(this)
 	        })
 	      );
@@ -18321,13 +18327,11 @@ webpackJsonp([1],[
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _GridList = __webpack_require__(/*! material-ui/GridList */ 668);
+	var _List = __webpack_require__(/*! material-ui/List */ 675);
 	
 	var _pageview = __webpack_require__(/*! material-ui/svg-icons/action/pageview */ 1032);
 	
 	var _pageview2 = _interopRequireDefault(_pageview);
-	
-	var _materialUi = __webpack_require__(/*! material-ui */ 534);
 	
 	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 641);
 	
@@ -18363,52 +18367,42 @@ webpackJsonp([1],[
 	
 	      var actions = [_react2.default.createElement(_FlatButton2.default, {
 	        label: 'Cancel',
-	        primary: true,
-	        onTouchTap: handleClose
+	        onTouchTap: handleClose,
+	        primary: true
 	      })];
 	
 	      return _react2.default.createElement(
 	        _Dialog2.default,
 	        {
-	          title: 'Choose Log File:',
 	          actions: actions,
+	          contentStyle: { width: '70vw', maxWidth: 'none' },
 	          modal: false,
-	          open: dialogOpen,
-	          onRequestClose: handleClose
+	          onRequestClose: handleClose,
+	          open: dialogOpen
 	        },
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: (0, _classnames2.default)(_style2.default.dialogRoot) },
 	          _react2.default.createElement(
-	            'div',
-	            { className: (0, _classnames2.default)(_style2.default.dialogroot) },
-	            _react2.default.createElement(
-	              _GridList.GridList,
-	              {
-	                cellHeight: 50,
-	                className: (0, _classnames2.default)(_style2.default.gridlist)
-	              },
-	              logsDetails.logsPaths.map(function (logFile, index) {
-	                return _react2.default.createElement(_GridList.GridTile, {
-	                  key: index,
-	                  title: logFile.name,
-	                  actionIcon: _react2.default.createElement(
-	                    _materialUi.IconButton,
-	                    {
-	                      onTouchTap: function onTouchTap() {
-	                        return showLog(logFile.path, logsDetails.procId, logFile.name);
-	                      },
-	                      tooltip: 'Show Log'
-	                    },
-	                    _react2.default.createElement(_pageview2.default, null)
-	                  )
-	                });
-	              })
-	            )
+	            _List.List,
+	            null,
+	            logsDetails.logsPaths.map(function (logFile) {
+	              return _react2.default.createElement(_List.ListItem, {
+	                key: logFile.name,
+	                leftIcon: _react2.default.createElement(_pageview2.default, null),
+	                onTouchTap: function onTouchTap() {
+	                  return showLog(logFile.path, logsDetails.procId, logFile.name);
+	                },
+	                primaryText: logFile.name
+	              });
+	            })
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { id: 'logContent', className: (0, _classnames2.default)(_style2.default.logtext, _style2.default.scroll) },
+	            {
+	              className: (0, _classnames2.default)(_style2.default.logtext, _style2.default.scroll),
+	              id: 'logContent'
+	            },
 	            logText.map(function (text, index) {
 	              return _react2.default.createElement(
 	                'div',
@@ -18424,6 +18418,16 @@ webpackJsonp([1],[
 	  return LogDialog;
 	}(_react.Component);
 	
+	LogDialog.propTypes = {
+	  dialogOpen: _react.PropTypes.bool,
+	  handleClose: _react.PropTypes.func,
+	  logText: _react.PropTypes.array,
+	  logsDetails: _react.PropTypes.object,
+	  showLog: _react.PropTypes.func
+	};
+	LogDialog.defaultProps = {
+	  logText: []
+	};
 	exports.default = LogDialog;
 
 /***/ },
@@ -18990,14 +18994,13 @@ webpackJsonp([1],[
 	
 	
 	// module
-	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.style__dialogroot___1ub1V {\r\n  display: 'flex';\r\n  -ms-flex-wrap: 'wrap';\r\n      flex-wrap: 'wrap';\r\n  -webkit-box-pack: 'space-around';\r\n      -ms-flex-pack: 'space-around';\r\n          justify-content: 'space-around';\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 30vh;\r\n  white-space: pre-wrap;\r\n}\r\n\r\n.style__gridlist___2a2Ro {\r\n  width: 500px;\r\n  height: 50px;\r\n  margin-bottom: 24px;\r\n  margin-top: 24px;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;CACrB;;AAED;EACE,gBAAgB;EAChB,sBAAkB;MAAlB,kBAAkB;EAClB,iCAAgC;MAAhC,8BAAgC;UAAhC,gCAAgC;CACjC;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;CACvB;;AAED;EACE,aAAa;EACb,aAAa;EACb,oBAAoB;EACpB,iBAAiB;CAClB","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.dialogroot {\r\n  display: 'flex';\r\n  flex-wrap: 'wrap';\r\n  justify-content: 'space-around';\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 30vh;\r\n  white-space: pre-wrap;\r\n}\r\n\r\n.gridlist {\r\n  width: 500px;\r\n  height: 50px;\r\n  margin-bottom: 24px;\r\n  margin-top: 24px;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.style__dialogRoot___2i-Yq {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  -webkit-box-flex: 1;\r\n      -ms-flex: 1;\r\n          flex: 1;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;CACrB;;AAED;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,oBAAQ;MAAR,YAAQ;UAAR,QAAQ;CACT","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  flex: 1;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 	exports.locals = {
 		"logtext": "style__logtext___3Ct6G",
-		"dialogroot": "style__dialogroot___1ub1V",
-		"scroll": "style__scroll___39oiS",
-		"gridlist": "style__gridlist___2a2Ro"
+		"dialogRoot": "style__dialogRoot___2i-Yq",
+		"scroll": "style__scroll___39oiS"
 	};
 
 /***/ }
