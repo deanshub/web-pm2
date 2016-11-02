@@ -7,24 +7,33 @@ const processController = require('./processController');
 
 const EXTRA_PROCESSES_DIR = 'processes';
 let externalProcesses = {};
-// Q.longStackSupport = true;
+Q.longStackSupport = true;
 
 const startup = () => {
   processController.list().then((stats)=>{
     const existingProcesses = stats.processes.reduce((result, process)=>{
-      result[process.name] = process.pm2_env.status;
+      // console.log(process.name, process.pm2_env.status);
+      result[process.name] = process;
       return result;
     },{});
+    // console.log(existingProcesses);
 
     let promises;
     if (config.processes!==undefined && Array.isArray(config.processes)){
       promises = config.processes.map((process)=>{
         if (existingProcesses[process.name]!==undefined) {
-          if (existingProcesses[process.name]!=='online'){
-            return ()=>{
-              console.log(`Reloading ${process.name}`);
-              return processController.restart(process.name);
-            };
+          if (existingProcesses[process.name].pm2_env && existingProcesses[process.name].pm2_env.status!=='online'){
+            if (existingProcesses[process.name].pm2!==false){
+              return ()=>{
+                console.log(`Reloading ${process.name}`);
+                return processController.start(existingProcesses[process.name]);
+              };
+            }else{
+              return ()=>{
+                console.log(`Reloading ${process.name}`);
+                return processController.restart(process.name);
+              };
+            }
           }
         }else{
           return ()=>{
@@ -32,6 +41,7 @@ const startup = () => {
             return processController.start(process);
           };
         }
+
         return ()=>Q(undefined);
       });
     }else {

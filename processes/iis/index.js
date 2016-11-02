@@ -1,6 +1,7 @@
 const child_process = require('child_process');
 
 module.exports = {
+  pm2: false,
   start: ()=>{
     return new Promise((resolve, reject) => {
       child_process.exec('iisreset /start', (err, stdOut, stdErr) => {

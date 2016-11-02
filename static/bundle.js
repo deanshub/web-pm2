@@ -7866,11 +7866,11 @@ webpackJsonp([1],[
 	
 	var _ActionToolbar2 = _interopRequireDefault(_ActionToolbar);
 	
-	var _ProcessTable = __webpack_require__(/*! ../../components/ProcessTable */ 1036);
+	var _ProcessTable = __webpack_require__(/*! ../../components/ProcessTable */ 1038);
 	
 	var _ProcessTable2 = _interopRequireDefault(_ProcessTable);
 	
-	var _style = __webpack_require__(/*! ./style.css */ 1041);
+	var _style = __webpack_require__(/*! ./style.css */ 1043);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -8650,7 +8650,7 @@ webpackJsonp([1],[
 	
 	var _LogDialog2 = _interopRequireDefault(_LogDialog);
 	
-	var _style = __webpack_require__(/*! ./style.css */ 1033);
+	var _style = __webpack_require__(/*! ./style.css */ 1035);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -18346,7 +18346,7 @@ webpackJsonp([1],[
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _style = __webpack_require__(/*! ./style.css */ 1043);
+	var _style = __webpack_require__(/*! ./style.css */ 1033);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -18477,9 +18477,9 @@ webpackJsonp([1],[
 
 /***/ },
 /* 1033 */
-/*!********************************************!*\
-  !*** ./components/ActionToolbar/style.css ***!
-  \********************************************/
+/*!****************************************!*\
+  !*** ./components/LogDialog/style.css ***!
+  \****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -18506,6 +18506,56 @@ webpackJsonp([1],[
 
 /***/ },
 /* 1034 */
+/*!***************************************************************************************************************************************************************!*\
+  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/LogDialog/style.css ***!
+  \***************************************************************************************************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.style__dialogRoot___2i-Yq {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  -webkit-box-flex: 1;\r\n      -ms-flex: 1;\r\n          flex: 1;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;CACrB;;AAED;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,oBAAQ;MAAR,YAAQ;UAAR,QAAQ;CACT","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  flex: 1;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"logtext": "style__logtext___3Ct6G",
+		"dialogRoot": "style__dialogRoot___2i-Yq",
+		"scroll": "style__scroll___39oiS"
+	};
+
+/***/ },
+/* 1035 */
+/*!********************************************!*\
+  !*** ./components/ActionToolbar/style.css ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../~/postcss-loader!./style.css */ 1036);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 811)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1036 */
 /*!*******************************************************************************************************************************************************************!*\
   !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/ActionToolbar/style.css ***!
   \*******************************************************************************************************************************************************************/
@@ -18516,13 +18566,13 @@ webpackJsonp([1],[
 	
 	
 	// module
-	exports.push([module.id, "@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(" + __webpack_require__(/*! ../../fonts/hack-regular-latin-webfont.ttf */ 1035) + ");\r\n}\r\n", "", {"version":3,"sources":["/./components/ActionToolbar/style.css"],"names":[],"mappings":"AAAA;IACI,oBAAoB;IACpB,mCAAuD;CAC1D","file":"style.css","sourcesContent":["@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(\"../../fonts/hack-regular-latin-webfont.ttf\");\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(" + __webpack_require__(/*! ../../fonts/hack-regular-latin-webfont.ttf */ 1037) + ");\r\n}\r\n", "", {"version":3,"sources":["/./components/ActionToolbar/style.css"],"names":[],"mappings":"AAAA;IACI,oBAAoB;IACpB,mCAAuD;CAC1D","file":"style.css","sourcesContent":["@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(\"../../fonts/hack-regular-latin-webfont.ttf\");\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 1035 */
+/* 1037 */
 /*!**********************************************!*\
   !*** ./fonts/hack-regular-latin-webfont.ttf ***!
   \**********************************************/
@@ -18531,7 +18581,7 @@ webpackJsonp([1],[
 	module.exports = __webpack_require__.p + "7c3883ad0033e183dd62b51fe4f440f0.ttf";
 
 /***/ },
-/* 1036 */
+/* 1038 */
 /*!******************************************!*\
   !*** ./components/ProcessTable/index.js ***!
   \******************************************/
@@ -18543,7 +18593,7 @@ webpackJsonp([1],[
 	  value: true
 	});
 	
-	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 1037);
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 1039);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
@@ -18577,11 +18627,11 @@ webpackJsonp([1],[
 	
 	var _classnames3 = _interopRequireDefault(_classnames2);
 	
-	var _dateFilter = __webpack_require__(/*! ../../utils/dateFilter */ 1038);
+	var _dateFilter = __webpack_require__(/*! ../../utils/dateFilter */ 1040);
 	
 	var _dateFilter2 = _interopRequireDefault(_dateFilter);
 	
-	var _style = __webpack_require__(/*! ./style.css */ 1039);
+	var _style = __webpack_require__(/*! ./style.css */ 1041);
 	
 	var _style2 = _interopRequireDefault(_style);
 	
@@ -18616,6 +18666,7 @@ webpackJsonp([1],[
 	          selectedRow = _props.selectedRow,
 	          _onRowSelection = _props.onRowSelection;
 	
+	      console.log(processes);
 	
 	      return _react2.default.createElement(
 	        _Table.Table,
@@ -18795,7 +18846,7 @@ webpackJsonp([1],[
 	exports.default = ProcessTable;
 
 /***/ },
-/* 1037 */
+/* 1039 */
 /*!****************************************************!*\
   !*** ../~/babel-runtime/helpers/defineProperty.js ***!
   \****************************************************/
@@ -18827,7 +18878,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 1038 */
+/* 1040 */
 /*!*****************************!*\
   !*** ./utils/dateFilter.js ***!
   \*****************************/
@@ -18852,60 +18903,10 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 1039 */
+/* 1041 */
 /*!*******************************************!*\
   !*** ./components/ProcessTable/style.css ***!
   \*******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../~/postcss-loader!./style.css */ 1040);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 811)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1040 */
-/*!******************************************************************************************************************************************************************!*\
-  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/ProcessTable/style.css ***!
-  \******************************************************************************************************************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".style__notonline___1QzNk{\r\n  color: #F44336;\r\n}\r\n.style__online___2OQC4{\r\n  color: #4CAF50;\r\n}\r\n.style__capitalize___2jAs3{\r\n  text-transform: capitalize;\r\n}\r\n", "", {"version":3,"sources":["/./components/ProcessTable/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AACD;EACE,2BAA2B;CAC5B","file":"style.css","sourcesContent":[".notonline{\r\n  color: #F44336;\r\n}\r\n.online{\r\n  color: #4CAF50;\r\n}\r\n.capitalize{\r\n  text-transform: capitalize;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
-	
-	// exports
-	exports.locals = {
-		"notonline": "style__notonline___1QzNk",
-		"online": "style__online___2OQC4",
-		"capitalize": "style__capitalize___2jAs3"
-	};
-
-/***/ },
-/* 1041 */
-/*!***************************************!*\
-  !*** ./containers/HomePage/style.css ***!
-  \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -18932,9 +18933,9 @@ webpackJsonp([1],[
 
 /***/ },
 /* 1042 */
-/*!**************************************************************************************************************************************************************!*\
-  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./containers/HomePage/style.css ***!
-  \**************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************!*\
+  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/ProcessTable/style.css ***!
+  \******************************************************************************************************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
@@ -18942,19 +18943,20 @@ webpackJsonp([1],[
 	
 	
 	// module
-	exports.push([module.id, ".style__details___3q8pm{\r\n}\r\n\r\n.style__chartItem___2dU6W{\r\n}\r\n", "", {"version":3,"sources":["/./containers/HomePage/style.css"],"names":[],"mappings":"AAAA;CACC;;AAED;CACC","file":"style.css","sourcesContent":[".details{\r\n}\r\n\r\n.chartItem{\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".style__notonline___1QzNk{\r\n  color: #F44336;\r\n}\r\n.style__online___2OQC4{\r\n  color: #4CAF50;\r\n}\r\n.style__capitalize___2jAs3{\r\n  text-transform: capitalize;\r\n}\r\n", "", {"version":3,"sources":["/./components/ProcessTable/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AACD;EACE,2BAA2B;CAC5B","file":"style.css","sourcesContent":[".notonline{\r\n  color: #F44336;\r\n}\r\n.online{\r\n  color: #4CAF50;\r\n}\r\n.capitalize{\r\n  text-transform: capitalize;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 	exports.locals = {
-		"details": "style__details___3q8pm",
-		"chartItem": "style__chartItem___2dU6W"
+		"notonline": "style__notonline___1QzNk",
+		"online": "style__online___2OQC4",
+		"capitalize": "style__capitalize___2jAs3"
 	};
 
 /***/ },
 /* 1043 */
-/*!****************************************!*\
-  !*** ./components/LogDialog/style.css ***!
-  \****************************************/
+/*!***************************************!*\
+  !*** ./containers/HomePage/style.css ***!
+  \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -18981,9 +18983,9 @@ webpackJsonp([1],[
 
 /***/ },
 /* 1044 */
-/*!***************************************************************************************************************************************************************!*\
-  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/LogDialog/style.css ***!
-  \***************************************************************************************************************************************************************/
+/*!**************************************************************************************************************************************************************!*\
+  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./containers/HomePage/style.css ***!
+  \**************************************************************************************************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
@@ -18991,13 +18993,12 @@ webpackJsonp([1],[
 	
 	
 	// module
-	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.style__dialogRoot___2i-Yq {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  -webkit-box-flex: 1;\r\n      -ms-flex: 1;\r\n          flex: 1;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;CACrB;;AAED;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,oBAAQ;MAAR,YAAQ;UAAR,QAAQ;CACT","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  flex: 1;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".style__details___3q8pm{\r\n}\r\n\r\n.style__chartItem___2dU6W{\r\n}\r\n", "", {"version":3,"sources":["/./containers/HomePage/style.css"],"names":[],"mappings":"AAAA;CACC;;AAED;CACC","file":"style.css","sourcesContent":[".details{\r\n}\r\n\r\n.chartItem{\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 	exports.locals = {
-		"logtext": "style__logtext___3Ct6G",
-		"dialogRoot": "style__dialogRoot___2i-Yq",
-		"scroll": "style__scroll___39oiS"
+		"details": "style__details___3q8pm",
+		"chartItem": "style__chartItem___2dU6W"
 	};
 
 /***/ }

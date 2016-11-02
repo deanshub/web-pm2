@@ -33,6 +33,7 @@ class ProcessTable extends Component {
 
   render() {
     const { processes, searchText, selectedRow, onRowSelection } = this.props;
+    console.log(processes);
 
     return (
       <Table onRowSelection={(rowIndex)=>{onRowSelection(processes[rowIndex]);}}>

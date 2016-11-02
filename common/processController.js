@@ -29,17 +29,27 @@ module.exports={
   list:()=>{
     let stats = getOsStats();
     const externalProcesses = utils.getExternalProcesses();
-    const statusPromises = Object.keys(externalProcesses).map(name=>
-      externalProcesses[name].status().catch(err=>{
-        console.error(`error getting status of external process "${name}":`, err);
-        return {status:'unknown'};
-      })
-    );
+    const statusPromises = Object.keys(externalProcesses).map(name=>{
+      if (externalProcesses[name].pm2!==false){
+        return new Promise(resolve=>{
+          return resolve({status:'offline'});
+        });
+      }else{
+        return externalProcesses[name].status().catch(err=>{
+          console.error(`error getting status of external process "${name}":`, err);
+          return {status:'unknown'};
+        });
+      }
+    });
     return Promise.all([pm2wrapper.list(), ...statusPromises]).then(([list, ...statuses])=>{
-      const outerProcesses = Object.keys(externalProcesses).map((name, index)=>{
-        return {
+      const pm2ProcesesNames = list.map(proc=>proc.name);
+
+      const outerProcesses = Object.keys(externalProcesses)
+      .filter(name=>!pm2ProcesesNames.includes(name))
+      .map((name, index)=>{
+        const procStatus = {
           name,
-          outer:true,
+          pm2:false,
           pm_id: undefined,
           pm2_env: {
             exec_mode:'External Process',
@@ -55,7 +65,14 @@ module.exports={
             cpu: undefined,
           },
         };
+
+        if (externalProcesses[name].pm2!==false){
+          return Object.assign({}, procStatus, externalProcesses[name]);
+        }else{
+          return procStatus;
+        }
       });
+
       stats.processes=list.concat(outerProcesses);
       return stats;
     });
@@ -78,7 +95,7 @@ module.exports={
   },
   restart:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id]){
+    if (externalProcesses[id].pm2!==false){
       return externalProcesses[id].restart();
     }else{
       return pm2wrapper.restart(id);
