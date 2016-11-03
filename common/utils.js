@@ -21,23 +21,25 @@ const startup = () => {
     let promises;
     if (config.processes!==undefined && Array.isArray(config.processes)){
       promises = config.processes.map((process)=>{
-        if (existingProcesses[process.name]!==undefined) {
-          if (existingProcesses[process.name].pm2_env && existingProcesses[process.name].pm2_env.status!=='online'){
-            if (existingProcesses[process.name].pm2!==false){
+        const processName = typeof(process)==='string'?process:process.name;
+
+        if (existingProcesses[processName]!==undefined) {
+          if (existingProcesses[processName].pm2_env && existingProcesses[processName].pm2_env.status!=='online'){
+            if (existingProcesses[processName].pm2!==false){
               return ()=>{
-                console.log(`Reloading ${process.name}`);
-                return processController.start(existingProcesses[process.name]);
+                console.log(`Reloading ${processName}`);
+                return processController.start(existingProcesses[processName]);
               };
             }else{
               return ()=>{
-                console.log(`Reloading ${process.name}`);
-                return processController.restart(process.name);
+                console.log(`Reloading ${processName}`);
+                return processController.restart(processName);
               };
             }
           }
         }else{
           return ()=>{
-            console.log(`Starting ${process.name}`);
+            console.log(`Starting ${processName}`);
             return processController.start(process);
           };
         }
