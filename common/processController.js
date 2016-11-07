@@ -79,7 +79,7 @@ module.exports={
   },
   start:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id]){
+    if (externalProcesses[id].pm2===false){
       return externalProcesses[id].start();
     }else{
       return pm2wrapper.start(id);
@@ -87,7 +87,7 @@ module.exports={
   },
   stop:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id]){
+    if (externalProcesses[id].pm2===false){
       return externalProcesses[id].stop();
     }else{
       return pm2wrapper.stop(id);
@@ -95,7 +95,7 @@ module.exports={
   },
   restart:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2!==false){
+    if (externalProcesses[id].pm2===false){
       return externalProcesses[id].restart();
     }else{
       return pm2wrapper.restart(id);
@@ -103,7 +103,7 @@ module.exports={
   },
   delete:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id]){
+    if (externalProcesses[id].pm2===false){
       return externalProcesses[id].delete();
     }else{
       return pm2wrapper.delete(id);

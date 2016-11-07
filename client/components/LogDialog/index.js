@@ -1,25 +1,29 @@
 import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import {List, ListItem} from 'material-ui/List';
-import PageView from 'material-ui/svg-icons/action/pageview';
+import InsertDriveFile from 'material-ui/svg-icons/editor/insert-drive-file';
 import FlatButton from 'material-ui/FlatButton';
 import classnames from 'classnames';
 import style from './style.css';
 
 export default class LogDialog extends Component {
   static propTypes={
-    dialogOpen: PropTypes.bool,
+    logDialogOpen: PropTypes.bool,
     handleClose: PropTypes.func,
+    logName: PropTypes.string,
     logText: PropTypes.array,
     logsDetails: PropTypes.object,
+    processId: PropTypes.string,
     showLog: PropTypes.func,
   }
   static defaultProps={
     logText: [],
+    logName: '',
+    processId: '',
   };
 
   render(){
-    const {dialogOpen, handleClose, showLog, logsDetails, logText} = this.props;
+    const {logDialogOpen, handleClose, showLog, logsDetails, logText, logName, processId} = this.props;
     const actions = [
       <FlatButton
           label="Cancel"
@@ -30,19 +34,21 @@ export default class LogDialog extends Component {
 
     return (
       <Dialog
+          title={logName!=''?`Logs - Process:"${processId}" Log:"${logName}"`:''}
           actions={actions}
           contentStyle={{width: '70vw', maxWidth:'none'}}
           modal={false}
           onRequestClose={handleClose}
-          open={dialogOpen}
+          open={logDialogOpen}
       >
         <div className={classnames(style.dialogRoot)}>
           <List>
             {
               logsDetails.logsPaths.map(logFile =>
                 <ListItem
+                    style={logName===logFile.name?{color:'#fff', backgroundColor:'#000'}:{}}
                     key={logFile.name}
-                    leftIcon={<PageView />}
+                    leftIcon={<InsertDriveFile />}
                     onTouchTap={()=>showLog(logFile.path, logsDetails.procId, logFile.name)}
                     primaryText={logFile.name}
                 />

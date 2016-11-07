@@ -6,6 +6,7 @@ import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-mo
 import AvStop from 'material-ui/svg-icons/av/stop';
 import AvReplay from 'material-ui/svg-icons/av/replay';
 import ActionsDelete from 'material-ui/svg-icons/action/delete';
+import ActionsBuild from 'material-ui/svg-icons/action/build';
 import InsertDriveFile from 'material-ui/svg-icons/editor/insert-drive-file';
 import request from 'superagent';
 import http from 'stream-http';
@@ -33,7 +34,7 @@ class ActionToolbar extends Component {
     super(props);
     this.state = {
       openMenu: false,
-      dialogOpen: false,
+      logDialogOpen: false,
       logsDetails: {
         procId: null,
         logsPaths: [],
@@ -57,11 +58,12 @@ class ActionToolbar extends Component {
   }
 
   handleOpen() {
-    this.setState({dialogOpen: true});
+    this.setState({logDialogOpen: true});
   }
 
   showLog(logpath, id, logname) {
     this.setState({
+      currentLogName: logname,
       logText: [],
     });
 
@@ -99,7 +101,7 @@ class ActionToolbar extends Component {
 
   handleClose = () => {
     this.setState({
-      dialogOpen: false,
+      logDialogOpen: false,
       logText: [],
     });
 
@@ -135,23 +137,30 @@ class ActionToolbar extends Component {
     request.get(url)
     .end((err, res)=>{
       this.setState({
-        dialogOpen: true,
+        selectedProcess: processId,
+        currentLogName: '',
+        logDialogOpen: true,
         logsDetails: res.body,
       });
       setTimeout(this.props.refreshStats);
     });
   }
 
+  showConfiguration(processId){
+    console.log(processId);
+  }
+
   render() {
     const { rowSelected, handleSearch } = this.props;
-    const { openMenu, anchorEl, logsDetails, logText, dialogOpen } = this.state;
+    const { openMenu, anchorEl, logsDetails, logText, logDialogOpen, currentLogName, selectedProcess } = this.state;
 
-    let processId;
-    if (rowSelected && rowSelected.pm_id!==undefined){
-      processId = rowSelected.pm_id;
-    }else if (rowSelected && rowSelected.name!==undefined) {
-      processId = rowSelected.name;
-    }
+    // let processId;
+    // if (rowSelected && rowSelected.pm_id!==undefined){
+    //   processId = rowSelected.pm_id;
+    // }else if (rowSelected && rowSelected.name!==undefined) {
+    //   processId = rowSelected.name;
+    // }
+    const processId = rowSelected?rowSelected.name:undefined;
 
     return (
       <Toolbar>
@@ -176,6 +185,13 @@ class ActionToolbar extends Component {
               tooltip="Delete"
           >
             <ActionsDelete />
+          </IconButton>
+          <IconButton
+              disabled={!rowSelected}
+              onTouchTap={()=>this.showConfiguration(processId)}
+              tooltip="Configuration"
+          >
+            <ActionsBuild />
           </IconButton>
           <IconButton
               disabled={!rowSelected}
@@ -221,10 +237,12 @@ class ActionToolbar extends Component {
         </ToolbarGroup>
 
         <LogDialog
-            dialogOpen={dialogOpen}
+            logDialogOpen={logDialogOpen}
             handleClose={::this.handleClose}
+            logName={currentLogName}
             logText={logText}
             logsDetails={logsDetails}
+            processId={selectedProcess}
             showLog={::this.showLog}
         />
       </Toolbar>

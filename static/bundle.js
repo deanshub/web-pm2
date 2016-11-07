@@ -8630,6 +8630,10 @@ webpackJsonp([1],[
 	
 	var _delete2 = _interopRequireDefault(_delete);
 	
+	var _build = __webpack_require__(/*! material-ui/svg-icons/action/build */ 1045);
+	
+	var _build2 = _interopRequireDefault(_build);
+	
 	var _insertDriveFile = __webpack_require__(/*! material-ui/svg-icons/editor/insert-drive-file */ 985);
 	
 	var _insertDriveFile2 = _interopRequireDefault(_insertDriveFile);
@@ -8675,7 +8679,7 @@ webpackJsonp([1],[
 	
 	    _this.handleClose = function () {
 	      _this.setState({
-	        dialogOpen: false,
+	        logDialogOpen: false,
 	        logText: []
 	      });
 	
@@ -8687,7 +8691,7 @@ webpackJsonp([1],[
 	
 	    _this.state = {
 	      openMenu: false,
-	      dialogOpen: false,
+	      logDialogOpen: false,
 	      logsDetails: {
 	        procId: null,
 	        logsPaths: []
@@ -8716,7 +8720,7 @@ webpackJsonp([1],[
 	  }, {
 	    key: 'handleOpen',
 	    value: function handleOpen() {
-	      this.setState({ dialogOpen: true });
+	      this.setState({ logDialogOpen: true });
 	    }
 	  }, {
 	    key: 'showLog',
@@ -8724,6 +8728,7 @@ webpackJsonp([1],[
 	      var _this2 = this;
 	
 	      this.setState({
+	        currentLogName: logname,
 	        logText: []
 	      });
 	
@@ -8789,11 +8794,18 @@ webpackJsonp([1],[
 	      var url = '/api/operations/logs/' + processId;
 	      _superagent2.default.get(url).end(function (err, res) {
 	        _this4.setState({
-	          dialogOpen: true,
+	          selectedProcess: processId,
+	          currentLogName: '',
+	          logDialogOpen: true,
 	          logsDetails: res.body
 	        });
 	        setTimeout(_this4.props.refreshStats);
 	      });
+	    }
+	  }, {
+	    key: 'showConfiguration',
+	    value: function showConfiguration(processId) {
+	      console.log(processId);
 	    }
 	  }, {
 	    key: 'render',
@@ -8808,15 +8820,18 @@ webpackJsonp([1],[
 	          anchorEl = _state.anchorEl,
 	          logsDetails = _state.logsDetails,
 	          logText = _state.logText,
-	          dialogOpen = _state.dialogOpen;
+	          logDialogOpen = _state.logDialogOpen,
+	          currentLogName = _state.currentLogName,
+	          selectedProcess = _state.selectedProcess;
 	
+	      // let processId;
+	      // if (rowSelected && rowSelected.pm_id!==undefined){
+	      //   processId = rowSelected.pm_id;
+	      // }else if (rowSelected && rowSelected.name!==undefined) {
+	      //   processId = rowSelected.name;
+	      // }
 	
-	      var processId = void 0;
-	      if (rowSelected && rowSelected.pm_id !== undefined) {
-	        processId = rowSelected.pm_id;
-	      } else if (rowSelected && rowSelected.name !== undefined) {
-	        processId = rowSelected.name;
-	      }
+	      var processId = rowSelected ? rowSelected.name : undefined;
 	
 	      return _react2.default.createElement(
 	        _Toolbar.Toolbar,
@@ -8856,6 +8871,17 @@ webpackJsonp([1],[
 	              tooltip: 'Delete'
 	            },
 	            _react2.default.createElement(_delete2.default, null)
+	          ),
+	          _react2.default.createElement(
+	            _materialUi.IconButton,
+	            {
+	              disabled: !rowSelected,
+	              onTouchTap: function onTouchTap() {
+	                return _this5.showConfiguration(processId);
+	              },
+	              tooltip: 'Configuration'
+	            },
+	            _react2.default.createElement(_build2.default, null)
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.IconButton,
@@ -8909,10 +8935,12 @@ webpackJsonp([1],[
 	          })
 	        ),
 	        _react2.default.createElement(_LogDialog2.default, {
-	          dialogOpen: dialogOpen,
+	          logDialogOpen: logDialogOpen,
 	          handleClose: this.handleClose.bind(this),
+	          logName: currentLogName,
 	          logText: logText,
 	          logsDetails: logsDetails,
+	          processId: selectedProcess,
 	          showLog: this.showLog.bind(this)
 	        })
 	      );
@@ -18334,9 +18362,9 @@ webpackJsonp([1],[
 	
 	var _List = __webpack_require__(/*! material-ui/List */ 675);
 	
-	var _pageview = __webpack_require__(/*! material-ui/svg-icons/action/pageview */ 1032);
+	var _insertDriveFile = __webpack_require__(/*! material-ui/svg-icons/editor/insert-drive-file */ 985);
 	
-	var _pageview2 = _interopRequireDefault(_pageview);
+	var _insertDriveFile2 = _interopRequireDefault(_insertDriveFile);
 	
 	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 641);
 	
@@ -18364,11 +18392,13 @@ webpackJsonp([1],[
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
-	          dialogOpen = _props.dialogOpen,
+	          logDialogOpen = _props.logDialogOpen,
 	          handleClose = _props.handleClose,
 	          showLog = _props.showLog,
 	          logsDetails = _props.logsDetails,
-	          logText = _props.logText;
+	          logText = _props.logText,
+	          logName = _props.logName,
+	          processId = _props.processId;
 	
 	      var actions = [_react2.default.createElement(_FlatButton2.default, {
 	        label: 'Cancel',
@@ -18379,11 +18409,12 @@ webpackJsonp([1],[
 	      return _react2.default.createElement(
 	        _Dialog2.default,
 	        {
+	          title: logName != '' ? 'Logs - Process:"' + processId + '" Log:"' + logName + '"' : '',
 	          actions: actions,
 	          contentStyle: { width: '70vw', maxWidth: 'none' },
 	          modal: false,
 	          onRequestClose: handleClose,
-	          open: dialogOpen
+	          open: logDialogOpen
 	        },
 	        _react2.default.createElement(
 	          'div',
@@ -18393,8 +18424,9 @@ webpackJsonp([1],[
 	            null,
 	            logsDetails.logsPaths.map(function (logFile) {
 	              return _react2.default.createElement(_List.ListItem, {
+	                style: logName === logFile.name ? { color: '#fff', backgroundColor: '#000' } : {},
 	                key: logFile.name,
-	                leftIcon: _react2.default.createElement(_pageview2.default, null),
+	                leftIcon: _react2.default.createElement(_insertDriveFile2.default, null),
 	                onTouchTap: function onTouchTap() {
 	                  return showLog(logFile.path, logsDetails.procId, logFile.name);
 	                },
@@ -18424,58 +18456,23 @@ webpackJsonp([1],[
 	}(_react.Component);
 	
 	LogDialog.propTypes = {
-	  dialogOpen: _react.PropTypes.bool,
+	  logDialogOpen: _react.PropTypes.bool,
 	  handleClose: _react.PropTypes.func,
+	  logName: _react.PropTypes.string,
 	  logText: _react.PropTypes.array,
 	  logsDetails: _react.PropTypes.object,
+	  processId: _react.PropTypes.string,
 	  showLog: _react.PropTypes.func
 	};
 	LogDialog.defaultProps = {
-	  logText: []
+	  logText: [],
+	  logName: '',
+	  processId: ''
 	};
 	exports.default = LogDialog;
 
 /***/ },
-/* 1032 */
-/*!*****************************************************!*\
-  !*** ../~/material-ui/svg-icons/action/pageview.js ***!
-  \*****************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 3);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _pure = __webpack_require__(/*! recompose/pure */ 565);
-	
-	var _pure2 = _interopRequireDefault(_pure);
-	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 574);
-	
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ActionPageview = function ActionPageview(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M11.5 9C10.12 9 9 10.12 9 11.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5S12.88 9 11.5 9zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-3.21 14.21l-2.91-2.91c-.69.44-1.51.7-2.39.7C9.01 16 7 13.99 7 11.5S9.01 7 11.5 7 16 9.01 16 11.5c0 .88-.26 1.69-.7 2.39l2.91 2.9-1.42 1.42z' })
-	  );
-	};
-	ActionPageview = (0, _pure2.default)(ActionPageview);
-	ActionPageview.displayName = 'ActionPageview';
-	ActionPageview.muiName = 'SvgIcon';
-	
-	exports.default = ActionPageview;
-
-/***/ },
+/* 1032 */,
 /* 1033 */
 /*!****************************************!*\
   !*** ./components/LogDialog/style.css ***!
@@ -18516,7 +18513,7 @@ webpackJsonp([1],[
 	
 	
 	// module
-	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.style__dialogRoot___2i-Yq {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  -webkit-box-flex: 1;\r\n      -ms-flex: 1;\r\n          flex: 1;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;CACrB;;AAED;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,oBAAQ;MAAR,YAAQ;UAAR,QAAQ;CACT","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n}\r\n\r\n.dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  flex: 1;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".style__logtext___3Ct6G {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n  padding-left: 20px;\r\n}\r\n\r\n.style__dialogRoot___2i-Yq {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n\r\n.style__scroll___39oiS {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  -webkit-box-flex: 1;\r\n      -ms-flex: 1;\r\n          flex: 1;\r\n}\r\n", "", {"version":3,"sources":["/./components/LogDialog/style.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,wBAAwB;EACxB,oBAAoB;EACpB,mBAAmB;CACpB;;AAED;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;;AAED;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,oBAAQ;MAAR,YAAQ;UAAR,QAAQ;CACT","file":"style.css","sourcesContent":[".logtext {\r\n  color: #00FF00;\r\n  background-color: black;\r\n  font-family: \"Hack\";\r\n  padding-left: 20px;\r\n}\r\n\r\n.dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.scroll {\r\n  overflow-y: scroll;\r\n  overflow-x: hidden;\r\n  height: 60vh;\r\n  white-space: pre-wrap;\r\n  flex: 1;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 	exports.locals = {
@@ -18666,7 +18663,6 @@ webpackJsonp([1],[
 	          selectedRow = _props.selectedRow,
 	          _onRowSelection = _props.onRowSelection;
 	
-	      console.log(processes);
 	
 	      return _react2.default.createElement(
 	        _Table.Table,
@@ -19000,6 +18996,46 @@ webpackJsonp([1],[
 		"details": "style__details___3q8pm",
 		"chartItem": "style__chartItem___2dU6W"
 	};
+
+/***/ },
+/* 1045 */
+/*!**************************************************!*\
+  !*** ../~/material-ui/svg-icons/action/build.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(/*! recompose/pure */ 565);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 574);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ActionBuild = function ActionBuild(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z' })
+	  );
+	};
+	ActionBuild = (0, _pure2.default)(ActionBuild);
+	ActionBuild.displayName = 'ActionBuild';
+	ActionBuild.muiName = 'SvgIcon';
+	
+	exports.default = ActionBuild;
 
 /***/ }
 ]);
