@@ -20,6 +20,9 @@ export default class LogDialog extends Component {
     logText: [],
     logName: '',
     processId: '',
+    logsDetails:{
+      logsPaths:[],
+    },
   };
 
   render(){
@@ -37,7 +40,7 @@ export default class LogDialog extends Component {
           title={logName!=''?`Logs - Process:"${processId}" Log:"${logName}"`:''}
           actions={actions}
           contentStyle={{width: '70vw', maxWidth:'none'}}
-          modal={false}
+          modal={true}
           onRequestClose={handleClose}
           open={logDialogOpen}
       >

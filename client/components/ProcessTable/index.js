@@ -51,7 +51,10 @@ class ProcessTable extends Component {
             <TableHeaderColumn>CPU</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody showRowHover>
+        <TableBody
+            deselectOnClickaway={false}
+            showRowHover
+        >
           {
             processes
             .filter((process)=>process.name.includes(searchText)||process.pm_id.toString().includes(searchText))

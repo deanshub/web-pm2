@@ -111,7 +111,7 @@ module.exports={
   },
   describe:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id]){
+    if (externalProcesses[id].pm2===false){
       return externalProcesses[id].describe().catch(err=>{
         console.error(`error getting described details of external process "${id}":`, err);
         return [];

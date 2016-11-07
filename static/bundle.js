@@ -18412,7 +18412,7 @@ webpackJsonp([1],[
 	          title: logName != '' ? 'Logs - Process:"' + processId + '" Log:"' + logName + '"' : '',
 	          actions: actions,
 	          contentStyle: { width: '70vw', maxWidth: 'none' },
-	          modal: false,
+	          modal: true,
 	          onRequestClose: handleClose,
 	          open: logDialogOpen
 	        },
@@ -18467,7 +18467,10 @@ webpackJsonp([1],[
 	LogDialog.defaultProps = {
 	  logText: [],
 	  logName: '',
-	  processId: ''
+	  processId: '',
+	  logsDetails: {
+	    logsPaths: []
+	  }
 	};
 	exports.default = LogDialog;
 
@@ -18734,7 +18737,10 @@ webpackJsonp([1],[
 	        ),
 	        _react2.default.createElement(
 	          _Table.TableBody,
-	          { showRowHover: true },
+	          {
+	            deselectOnClickaway: false,
+	            showRowHover: true
+	          },
 	          processes.filter(function (process) {
 	            return process.name.includes(searchText) || process.pm_id.toString().includes(searchText);
 	          }).map(function (process) {
