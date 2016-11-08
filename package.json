@@ -1,6 +1,6 @@
 {
   "name": "web-pm2",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "PM2 Web interface",
   "main": "index.js",
   "scripts": {
