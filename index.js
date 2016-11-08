@@ -92,7 +92,7 @@ app.get('/api/operations/kill', (req,res)=>{
 
 app.get('/api/operations/logs/:id', (req,res) => {
   if(!req.params.id){
-    req.status(400).send({
+    res.status(400).send({
       error:'Process id not supplied',
     });
     return;
@@ -121,14 +121,14 @@ app.get('/api/operations/showlog/:id/:logname', (req,res)=>{
   let logname = req.params.logname;
 
   if(!id){
-    req.status(400).send({
+    res.status(400).send({
       error:'Process id not supplied',
     });
     return;
   }
 
   if(!logname){
-    req.status(400).send({
+    res.status(400).send({
       error:'Logname not supplied',
     });
     return;
@@ -154,6 +154,38 @@ app.get('/api/operations/showlog/:id/:logname', (req,res)=>{
   //
   //   var readStream = fileSystem.createReadStream(logFilePath);
   //   readStream.pipe(res);
+  }).catch((err)=>{
+    console.error(err);
+    res.status(400).send(err);
+  });
+});
+
+app.get('/api/operations/configuration/:id', (req,res)=>{
+  if(!req.params.id){
+    res.status(400).send({
+      error:'Process id not supplied',
+    });
+    return;
+  }
+
+  processController.getConfigurations(req.params.id).then(configurationDetails=>{
+    res.json(configurationDetails);
+  }).catch((err)=>{
+    console.error(err);
+    res.status(400).send(err);
+  });
+});
+
+app.post('/api/operations/configuration/:id', (req,res)=>{
+  if(!req.params.id || !req.body.configurations){
+    res.status(400).send({
+      error:'Process id not supplied',
+    });
+    return;
+  }
+
+  processController.setConfigurations(req.params.id, req.body.configurations).then(configurationDetails=>{
+    res.json(configurationDetails);
   }).catch((err)=>{
     console.error(err);
     res.status(400).send(err);

@@ -1,0 +1,8 @@
+.dialogRoot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.dialogWrapper{
+  padding-top: 0 !important;
+}

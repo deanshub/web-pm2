@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
   pm2: true,
   name: 'nginx',
@@ -18,4 +20,24 @@ module.exports = {
   },
   max_memory_restart: '500M',
   instances: 1,
+  getConfigurations:()=>{
+    return new Promise((resolve, reject)=>{
+      fs.readFile('C:/git/nginx/sisense.nconfig', 'utf-8', (err, data) => {
+        if (err) return reject(err);
+        return resolve({'Whole Config': data});
+      });
+    });
+  },
+  setConfigurations:(configuration={})=>{
+    return new Promise((resolve, reject)=>{
+      if(configuration.hasOwnProperty('Whole Config')){
+        console.log('started');
+        fs.writeFile('C:/git/nginx/sisense.nconfig', configuration['Whole Config'], (err)=>{
+          console.log('resolved');
+          if (err) return reject(err);
+          resolve(configuration);
+        });
+      }
+    });
+  },
 };

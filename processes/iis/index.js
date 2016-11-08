@@ -48,4 +48,14 @@ module.exports = {
       }]);
     });
   },
+  getConfigurations:()=>{
+    return Promise.resolve({
+      port: 80,
+      ssl: false,
+    });
+  },
+  setConfigurations:(configuration={})=>{
+    console.log(configuration);
+    return Promise.resolve(configuration);
+  },
 };

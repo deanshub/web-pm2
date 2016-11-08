@@ -10,9 +10,10 @@ import ActionsBuild from 'material-ui/svg-icons/action/build';
 import InsertDriveFile from 'material-ui/svg-icons/editor/insert-drive-file';
 import request from 'superagent';
 import http from 'stream-http';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 import LogDialog from '../LogDialog';
-import style from './style.css';
+import ConfigurationDialog from '../ConfigurationDialog';
+// import style from './style.css';
 
 const SYSTEM_ACTIONS = {
   RESTART_ALL:'Start/Restart All',
@@ -99,7 +100,7 @@ class ActionToolbar extends Component {
     this.request = req;
   }
 
-  handleClose = () => {
+  handleLogClose = () => {
     this.setState({
       logDialogOpen: false,
       logText: [],
@@ -110,6 +111,13 @@ class ActionToolbar extends Component {
       this.request = null;
     }
   };
+
+  handleConfigurationClose = ()=>{
+    this.setState({
+      configurationDialogOpen: false,
+      configurationDetails: undefined,
+    });
+  }
 
   handleSystemAction(action, id){
     let url;
@@ -142,17 +150,41 @@ class ActionToolbar extends Component {
         logDialogOpen: true,
         logsDetails: res.body,
       });
-      setTimeout(this.props.refreshStats);
+      // setTimeout(this.props.refreshStats);
     });
   }
 
-  showConfiguration(processId){
-    console.log(processId);
+  getConfiguration(processId){
+    const url = `/api/operations/configuration/${processId}`;
+    request.get(url)
+    .end((err, res)=>{
+      this.setState({
+        selectedProcess: processId,
+        configurationDialogOpen: true,
+        configurationDetails: res.body,
+      });
+      // setTimeout(this.props.refreshStats);
+    });
+  }
+
+  setConfiguration(processId, configurations){
+    const url = `/api/operations/configuration/${processId}`;
+
+    request.post(url)
+    .send({configurations})
+    .end((err, res)=>{
+      // this.setState({
+      // });
+      console.log('success');
+      // setTimeout(this.props.refreshStats);
+    });
+    this.handleConfigurationClose();
   }
 
   render() {
     const { rowSelected, handleSearch } = this.props;
-    const { openMenu, anchorEl, logsDetails, logText, logDialogOpen, currentLogName, selectedProcess } = this.state;
+    const { openMenu, anchorEl, logsDetails, logText, logDialogOpen, currentLogName, selectedProcess,
+    configurationDialogOpen, configurationDetails } = this.state;
 
     // let processId;
     // if (rowSelected && rowSelected.pm_id!==undefined){
@@ -188,7 +220,7 @@ class ActionToolbar extends Component {
           </IconButton>
           <IconButton
               disabled={!rowSelected}
-              onTouchTap={()=>this.showConfiguration(processId)}
+              onTouchTap={()=>this.getConfiguration(processId)}
               tooltip="Configuration"
           >
             <ActionsBuild />
@@ -238,12 +270,20 @@ class ActionToolbar extends Component {
 
         <LogDialog
             logDialogOpen={logDialogOpen}
-            handleClose={::this.handleClose}
+            handleClose={::this.handleLogClose}
             logName={currentLogName}
             logText={logText}
             logsDetails={logsDetails}
             processId={selectedProcess}
             showLog={::this.showLog}
+        />
+
+        <ConfigurationDialog
+            configurationDialogOpen={configurationDialogOpen}
+            handleClose={::this.handleConfigurationClose}
+            configurationDetails={configurationDetails}
+            processId={selectedProcess}
+            setConfiguration={::this.setConfiguration}
         />
       </Toolbar>
     );

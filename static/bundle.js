@@ -8646,20 +8646,19 @@ webpackJsonp([1],[
 	
 	var _streamHttp2 = _interopRequireDefault(_streamHttp);
 	
-	var _classnames = __webpack_require__(/*! classnames */ 527);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
 	var _LogDialog = __webpack_require__(/*! ../LogDialog */ 1031);
 	
 	var _LogDialog2 = _interopRequireDefault(_LogDialog);
 	
-	var _style = __webpack_require__(/*! ./style.css */ 1035);
+	var _ConfigurationDialog = __webpack_require__(/*! ../ConfigurationDialog */ 1046);
 	
-	var _style2 = _interopRequireDefault(_style);
+	var _ConfigurationDialog2 = _interopRequireDefault(_ConfigurationDialog);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// import style from './style.css';
+	
+	// import classnames from 'classnames';
 	var SYSTEM_ACTIONS = {
 	  RESTART_ALL: 'Start/Restart All',
 	  STOP_ALL: 'Stop All',
@@ -8677,7 +8676,7 @@ webpackJsonp([1],[
 	
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (ActionToolbar.__proto__ || (0, _getPrototypeOf2.default)(ActionToolbar)).call(this, props));
 	
-	    _this.handleClose = function () {
+	    _this.handleLogClose = function () {
 	      _this.setState({
 	        logDialogOpen: false,
 	        logText: []
@@ -8687,6 +8686,13 @@ webpackJsonp([1],[
 	        _this.request.abort();
 	        _this.request = null;
 	      }
+	    };
+	
+	    _this.handleConfigurationClose = function () {
+	      _this.setState({
+	        configurationDialogOpen: false,
+	        configurationDetails: undefined
+	      });
 	    };
 	
 	    _this.state = {
@@ -8799,18 +8805,41 @@ webpackJsonp([1],[
 	          logDialogOpen: true,
 	          logsDetails: res.body
 	        });
-	        setTimeout(_this4.props.refreshStats);
+	        // setTimeout(this.props.refreshStats);
 	      });
 	    }
 	  }, {
-	    key: 'showConfiguration',
-	    value: function showConfiguration(processId) {
-	      console.log(processId);
+	    key: 'getConfiguration',
+	    value: function getConfiguration(processId) {
+	      var _this5 = this;
+	
+	      var url = '/api/operations/configuration/' + processId;
+	      _superagent2.default.get(url).end(function (err, res) {
+	        _this5.setState({
+	          selectedProcess: processId,
+	          configurationDialogOpen: true,
+	          configurationDetails: res.body
+	        });
+	        // setTimeout(this.props.refreshStats);
+	      });
+	    }
+	  }, {
+	    key: 'setConfiguration',
+	    value: function setConfiguration(processId, configurations) {
+	      var url = '/api/operations/configuration/' + processId;
+	
+	      _superagent2.default.post(url).send({ configurations: configurations }).end(function (err, res) {
+	        // this.setState({
+	        // });
+	        console.log('success');
+	        // setTimeout(this.props.refreshStats);
+	      });
+	      this.handleConfigurationClose();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this5 = this;
+	      var _this6 = this;
 	
 	      var _props = this.props,
 	          rowSelected = _props.rowSelected,
@@ -8822,7 +8851,9 @@ webpackJsonp([1],[
 	          logText = _state.logText,
 	          logDialogOpen = _state.logDialogOpen,
 	          currentLogName = _state.currentLogName,
-	          selectedProcess = _state.selectedProcess;
+	          selectedProcess = _state.selectedProcess,
+	          configurationDialogOpen = _state.configurationDialogOpen,
+	          configurationDetails = _state.configurationDetails;
 	
 	      // let processId;
 	      // if (rowSelected && rowSelected.pm_id!==undefined){
@@ -8844,7 +8875,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this5.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId);
+	                return _this6.handleSystemAction(SYSTEM_ACTIONS.STOP_ALL, processId);
 	              },
 	              tooltip: 'Stop'
 	            },
@@ -8855,7 +8886,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this5.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId);
+	                return _this6.handleSystemAction(SYSTEM_ACTIONS.RESTART_ALL, processId);
 	              },
 	              tooltip: 'Restart'
 	            },
@@ -8866,7 +8897,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this5.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId);
+	                return _this6.handleSystemAction(SYSTEM_ACTIONS.DELETE_ALL, processId);
 	              },
 	              tooltip: 'Delete'
 	            },
@@ -8877,7 +8908,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this5.showConfiguration(processId);
+	                return _this6.getConfiguration(processId);
 	              },
 	              tooltip: 'Configuration'
 	            },
@@ -8888,7 +8919,7 @@ webpackJsonp([1],[
 	            {
 	              disabled: !rowSelected,
 	              onTouchTap: function onTouchTap() {
-	                return _this5.getLogs(processId);
+	                return _this6.getLogs(processId);
 	              },
 	              tooltip: 'Logs'
 	            },
@@ -8917,7 +8948,7 @@ webpackJsonp([1],[
 	                  key: index,
 	                  primaryText: SYSTEM_ACTIONS[actionName],
 	                  onTouchTap: function onTouchTap() {
-	                    return _this5.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all');
+	                    return _this6.handleSystemAction(SYSTEM_ACTIONS[actionName], 'all');
 	                  }
 	                });
 	              })
@@ -8936,12 +8967,19 @@ webpackJsonp([1],[
 	        ),
 	        _react2.default.createElement(_LogDialog2.default, {
 	          logDialogOpen: logDialogOpen,
-	          handleClose: this.handleClose.bind(this),
+	          handleClose: this.handleLogClose.bind(this),
 	          logName: currentLogName,
 	          logText: logText,
 	          logsDetails: logsDetails,
 	          processId: selectedProcess,
 	          showLog: this.showLog.bind(this)
+	        }),
+	        _react2.default.createElement(_ConfigurationDialog2.default, {
+	          configurationDialogOpen: configurationDialogOpen,
+	          handleClose: this.handleConfigurationClose.bind(this),
+	          configurationDetails: configurationDetails,
+	          processId: selectedProcess,
+	          setConfiguration: this.setConfiguration.bind(this)
 	        })
 	      );
 	    }
@@ -18412,7 +18450,7 @@ webpackJsonp([1],[
 	          title: logName != '' ? 'Logs - Process:"' + processId + '" Log:"' + logName + '"' : '',
 	          actions: actions,
 	          contentStyle: { width: '70vw', maxWidth: 'none' },
-	          modal: true,
+	          modal: false,
 	          onRequestClose: handleClose,
 	          open: logDialogOpen
 	        },
@@ -18526,61 +18564,9 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 1035 */
-/*!********************************************!*\
-  !*** ./components/ActionToolbar/style.css ***!
-  \********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../~/postcss-loader!./style.css */ 1036);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 811)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1036 */
-/*!*******************************************************************************************************************************************************************!*\
-  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/ActionToolbar/style.css ***!
-  \*******************************************************************************************************************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(" + __webpack_require__(/*! ../../fonts/hack-regular-latin-webfont.ttf */ 1037) + ");\r\n}\r\n", "", {"version":3,"sources":["/./components/ActionToolbar/style.css"],"names":[],"mappings":"AAAA;IACI,oBAAoB;IACpB,mCAAuD;CAC1D","file":"style.css","sourcesContent":["@font-face {\r\n    font-family: \"Hack\";\r\n    src: url(\"../../fonts/hack-regular-latin-webfont.ttf\");\r\n}\r\n"],"sourceRoot":"webpack://"}]);
-	
-	// exports
-
-
-/***/ },
-/* 1037 */
-/*!**********************************************!*\
-  !*** ./fonts/hack-regular-latin-webfont.ttf ***!
-  \**********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "7c3883ad0033e183dd62b51fe4f440f0.ttf";
-
-/***/ },
+/* 1035 */,
+/* 1036 */,
+/* 1037 */,
 /* 1038 */
 /*!******************************************!*\
   !*** ./components/ProcessTable/index.js ***!
@@ -19042,6 +19028,210 @@ webpackJsonp([1],[
 	ActionBuild.muiName = 'SvgIcon';
 	
 	exports.default = ActionBuild;
+
+/***/ },
+/* 1046 */
+/*!*************************************************!*\
+  !*** ./components/ConfigurationDialog/index.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 487);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 491);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 492);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 496);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 519);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _react = __webpack_require__(/*! react */ 3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 654);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _TextField = __webpack_require__(/*! material-ui/TextField */ 580);
+	
+	var _TextField2 = _interopRequireDefault(_TextField);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 641);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	var _classnames = __webpack_require__(/*! classnames */ 527);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _style = __webpack_require__(/*! ./style.css */ 1047);
+	
+	var _style2 = _interopRequireDefault(_style);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LogDialog = function (_Component) {
+	  (0, _inherits3.default)(LogDialog, _Component);
+	
+	  function LogDialog(props) {
+	    (0, _classCallCheck3.default)(this, LogDialog);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (LogDialog.__proto__ || (0, _getPrototypeOf2.default)(LogDialog)).call(this, props));
+	
+	    _this.configurationDetails = {};
+	    return _this;
+	  }
+	
+	  (0, _createClass3.default)(LogDialog, [{
+	    key: 'prepareForm',
+	    value: function prepareForm(configurationDetails) {
+	      var _this2 = this;
+	
+	      var textFileds = [];
+	      if (configurationDetails) {
+	        var _loop = function _loop(prop) {
+	          textFileds.push(_react2.default.createElement(_TextField2.default, {
+	            defaultValue: configurationDetails[prop],
+	            floatingLabelText: prop,
+	            fullWidth: true,
+	            key: prop,
+	            multiLine: true,
+	            onChange: function onChange(event) {
+	              _this2.configurationDetails[prop] = event.target.value;
+	            }
+	          }));
+	        };
+	
+	        for (var prop in configurationDetails) {
+	          _loop(prop);
+	        }
+	      }
+	      return textFileds;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+	
+	      var _props = this.props,
+	          configurationDialogOpen = _props.configurationDialogOpen,
+	          handleClose = _props.handleClose,
+	          configurationDetails = _props.configurationDetails,
+	          processId = _props.processId,
+	          setConfiguration = _props.setConfiguration;
+	
+	      var actions = [_react2.default.createElement(_FlatButton2.default, {
+	        label: 'Update & Don\'t Restart',
+	        onTouchTap: function onTouchTap() {
+	          return setConfiguration(processId, _this3.configurationDetails);
+	        }
+	      }), _react2.default.createElement(_FlatButton2.default, {
+	        label: 'Cancel',
+	        onTouchTap: handleClose,
+	        primary: true
+	      })];
+	
+	      return _react2.default.createElement(
+	        _Dialog2.default,
+	        {
+	          actions: actions,
+	          autoScrollBodyContent: true,
+	          className: (0, _classnames2.default)(_style2.default.dialogWrapper),
+	          contentStyle: { width: '70vw', maxWidth: 'none' },
+	          modal: false,
+	          onRequestClose: handleClose,
+	          open: configurationDialogOpen,
+	          title: 'Configure - ' + processId
+	        },
+	        _react2.default.createElement(
+	          'div',
+	          { className: (0, _classnames2.default)(_style2.default.dialogRoot) },
+	          this.prepareForm(configurationDetails)
+	        )
+	      );
+	    }
+	  }]);
+	  return LogDialog;
+	}(_react.Component);
+	
+	LogDialog.propTypes = {
+	  configurationDialogOpen: _react.PropTypes.bool,
+	  handleClose: _react.PropTypes.func,
+	  configurationDetails: _react.PropTypes.object,
+	  processId: _react.PropTypes.string,
+	  setConfiguration: _react.PropTypes.func
+	};
+	LogDialog.defaultProps = {
+	  configurationDialogOpen: false
+	};
+	exports.default = LogDialog;
+
+/***/ },
+/* 1047 */
+/*!**************************************************!*\
+  !*** ./components/ConfigurationDialog/style.css ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../~/postcss-loader!./style.css */ 1048);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 811)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./../../../node_modules/postcss-loader/index.js!./style.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1048 */
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ../~/css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!../~/postcss-loader!./components/ConfigurationDialog/style.css ***!
+  \*************************************************************************************************************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 810)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".style__dialogRoot___3ViMQ {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\r\n  -ms-flex-pack: distribute;\r\n      justify-content: space-around;\r\n}\r\n.style__dialogWrapper___2ksU1{\r\n  padding-top: 0 !important;\r\n}\r\n", "", {"version":3,"sources":["/./components/ConfigurationDialog/style.css"],"names":[],"mappings":"AAAA;EACE,qBAAc;EAAd,qBAAc;EAAd,cAAc;EACd,oBAAgB;MAAhB,gBAAgB;EAChB,0BAA8B;MAA9B,8BAA8B;CAC/B;AACD;EACE,0BAA0B;CAC3B","file":"style.css","sourcesContent":[".dialogRoot {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n.dialogWrapper{\r\n  padding-top: 0 !important;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+	exports.locals = {
+		"dialogRoot": "style__dialogRoot___3ViMQ",
+		"dialogWrapper": "style__dialogWrapper___2ksU1"
+	};
 
 /***/ }
 ]);

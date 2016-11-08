@@ -140,4 +140,22 @@ module.exports={
       });
     }
   },
+  getConfigurations:id=>{
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id] && externalProcesses[id].getConfigurations){
+      return externalProcesses[id].getConfigurations();
+    }
+    // else{
+    //   return pm2wrapper.getConfigurations(id);
+    // }
+  },
+  setConfigurations:(id, configuration)=>{
+    const externalProcesses = utils.getExternalProcesses();
+    if (externalProcesses[id] && externalProcesses[id].setConfigurations){
+      return externalProcesses[id].setConfigurations(configuration);
+    }
+    // else{
+    //   return pm2wrapper.setConfigurations(id, configuration);
+    // }
+  },
 };
