@@ -3,7 +3,7 @@ import {List, ListItem} from 'material-ui/List';
 import AccessTime from 'material-ui/svg-icons/device/access-time';
 import Title from 'material-ui/svg-icons/editor/title';
 import classnames from 'classnames';
-import { Pie as PieChart } from 'react-chartjs';
+import { Line as LineChart } from 'react-chartjs';
 // import { bindActionCreators } from 'redux'
 // import { connect } from 'react-redux'
 
@@ -21,28 +21,51 @@ class HistoryGraph extends Component {
     monit:{},
   }
 
+  constructor(props){
+    super(props);
+    this.state = {
+      memData:{
+        labels:[],
+        datasets:[{
+          label: 'Used Memory',
+          data: [],
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          pointBackgroundColor: 'rgb(67, 160, 71)',
+          pointHoverBackgroundColor: 'rgb(229, 57, 53)',
+          pointHoverBorderColor: 'rgb(67, 160, 71)',
+          pointStrokeColor: 'rgb(229, 57, 53)',
+          pointBorderColor: 'rgb(67, 160, 71)',
+        }],
+      },
+      cpuData:  {
+        labels: [],
+        datasets: [],
+      },
+    };
+  }
+
   render() {
     const { system_info, monit } = this.props;
-    const memData = {
-      labels:['Used','Free'],
-      datasets:[
-        {
-          data:[Math.round(monit.free_mem/1024/1024), Math.round((monit.total_mem-monit.free_mem)/1024/1024)],
-          backgroundColor:['#F7464A','#46BFBD'],
-          hoverBackgroundColor:['#FF5A5E','#5AD3D1'],
-        },
-      ],
-    };
-    const cpuData = {
-      labels:monit.cpu?monit.cpu.map((cpu,index)=>`CPU${index+1}`).concat(['Idle']):['Used','Idle'],
-      datasets:[
-        {
-          data: monit.cpu?monit.cpu.map((cpu)=>cpu.times.user+cpu.times.nice+cpu.times.sys+cpu.times.irq).concat([monit.cpu.reduce((totalIdle,cpu)=>totalIdle+cpu.times.idle,0)]):[0,100],
-          backgroundColor:(monit.cpu?monit.cpu.map(()=>'#F7464A'):['#F7464A']).concat(['#46BFBD']),
-          hoverBackgroundColor:(monit.cpu?monit.cpu.map(()=>'#FF5A5E'):['#FF5A5E']).concat(['#5AD3D1']),
-        },
-      ],
-    };
+    let {memData, cpuData} = this.state;
+
+    memData.labels.push((new Date()).toLocaleString());
+    memData.datasets[0].data.push(Math.round((monit.total_mem - monit.free_mem)/1024/1024));
+
+    cpuData.labels.push((new Date()).toLocaleString());
+    if (monit.cpu){
+      let totalCpuCapacity = monit.cpu.reduce((total, cpu)=>
+        total + cpu.times.user + cpu.times.nice + cpu.times.sys +
+        cpu.times.irq + cpu.times.idle, 0);
+      monit.cpu.forEach((cpu, index)=>{
+        if (!cpuData.datasets[index]){
+          cpuData.datasets[index]={data:[], label:`CPU${index+1}`};
+        }
+
+        let cpuUsage = cpu.times.idle;
+        cpuData.datasets[index].data.push(cpuUsage / totalCpuCapacity * 100);
+      });
+    }
+
     return (
       <div className={classnames(style.container)}>
         <List style={{flex:1}}>
@@ -56,10 +79,13 @@ class HistoryGraph extends Component {
           />
         </List>
         <div style={{flex:2,width:'30%',margin:'25px 0'}}>
-          <PieChart data={cpuData} />
+          <LineChart
+              data={cpuData}
+              options={{scales:{yAxes:[{stacked:true}]}}}
+          />
         </div>
         <div style={{flex:2,width:'30%',margin:'25px 0'}}>
-          <PieChart data={memData} />
+          <LineChart data={memData} />
         </div>
       </div>
     );

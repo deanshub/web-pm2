@@ -28,7 +28,7 @@ const startup = () => {
             if (existingProcesses[processName].pm2!==false){
               return ()=>{
                 console.log(`Reloading ${processName}`);
-                return processController.start(existingProcesses[processName]);
+                return processController.start(processName);
               };
             }else{
               return ()=>{

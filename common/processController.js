@@ -82,7 +82,7 @@ module.exports={
     if (externalProcesses[id].pm2===false){
       return externalProcesses[id].start();
     }else{
-      return pm2wrapper.start(id);
+      return pm2wrapper.start(externalProcesses[id]);
     }
   },
   stop:id=>{
