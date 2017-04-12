@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+var childProcess = require('child_process');
+var path = require('path');
+
+var script = path.resolve(__dirname, '../index.js');
+var args = process.argv.slice(2).join(' ');
+var cmd = 'pm2 start "' + script + '" --name web-pm2 ' + args;
+
+childProcess.execSync(cmd);
