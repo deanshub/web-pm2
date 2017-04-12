@@ -1,7 +1,7 @@
 module.exports = {
   pm2: true,
-  name: 'vnext',
-  cwd: '../prismweb/MaestroWebApp/vnext',
+  name: 'privatevnext',
+  cwd: '../vnext',
   script: 'app.js',
   merge_logs: true,
   log_date_format: 'YYYY-MM-DD HH:mm Z',

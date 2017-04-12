@@ -1,7 +1,7 @@
 module.exports = {
   pm2: true,
   name: 'mongo',
-  cwd: '../vnext',
+  cwd: '../prismweb/MaestroWebApp/vnext',
   script: 'mongoStarter.js',
   merge_logs: true,
   log_date_format: 'YYYY-MM-DD HH:mm Z',
