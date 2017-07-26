@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 module.exports = {
-  pm2: true,
+  pm2proc: true,
   name: 'privatenginx',
   cwd: '../nginx',
   script: 'wrapper.js',
@@ -22,22 +22,132 @@ module.exports = {
   instances: 1,
   getConfigurations:()=>{
     return new Promise((resolve, reject)=>{
-      fs.readFile('C:/git/nginx/sisense.nconfig', 'utf-8', (err, data) => {
+      fs.readFile('C:/git/nginx/conf/nginx.conf', 'utf-8', (err, data) => {
         if (err) return reject(err);
-        return resolve({'Whole Config': data});
+        return resolve({'general': data});
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/sisense.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'sisense': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/node.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'node': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/net.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'net': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/ssl.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'ssl': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/cors.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'cors': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/static.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'static': data}));
+        });
+      });
+    }).then((conf)=>{
+      return new Promise((resolve, reject)=>{
+        fs.readFile('C:/git/nginx/conf/custom.conf', 'utf-8', (err, data) => {
+          if (err) return reject(err);
+          return resolve(Object.assign({},conf,{'custom': data}));
+        });
       });
     });
   },
-  setConfigurations:(configuration={})=>{
+  setConfigurations:(config={})=>{
     return new Promise((resolve, reject)=>{
-      if(configuration.hasOwnProperty('Whole Config')){
-        console.log('started');
-        fs.writeFile('C:/git/nginx/sisense.nconfig', configuration['Whole Config'], (err)=>{
-          console.log('resolved');
+      if(config.hasOwnProperty('general')){
+        fs.writeFile('C:/git/nginx/conf/nginx.conf', config['general'], (err)=>{
           if (err) return reject(err);
-          resolve(configuration);
+          resolve(config);
         });
       }
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('sisense')){
+          fs.writeFile('C:/git/nginx/conf/sisense.conf', config['sisense'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('node')){
+          fs.writeFile('C:/git/nginx/conf/node.conf', config['node'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('net')){
+          fs.writeFile('C:/git/nginx/conf/net.conf', config['net'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('ssl')){
+          fs.writeFile('C:/git/nginx/conf/ssl.conf', config['ssl'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('cors')){
+          fs.writeFile('C:/git/nginx/conf/cors.conf', config['cors'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('static')){
+          fs.writeFile('C:/git/nginx/conf/static.conf', config['static'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
+    }).then((config)=>{
+      return new Promise((resolve, reject)=>{
+        if(config.hasOwnProperty('custom')){
+          fs.writeFile('C:/git/nginx/conf/custom.conf', config['custom'], (err)=>{
+            if (err) return reject(err);
+            resolve(config);
+          });
+        }
+      });
     });
   },
 };

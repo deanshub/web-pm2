@@ -30,7 +30,7 @@ module.exports={
     let stats = getOsStats();
     const externalProcesses = utils.getExternalProcesses();
     const statusPromises = Object.keys(externalProcesses).map(name=>{
-      if (externalProcesses[name].pm2!==false){
+      if (externalProcesses[name].pm2proc!==false){
         return new Promise(resolve=>{
           return resolve({status:'offline'});
         });
@@ -66,7 +66,7 @@ module.exports={
           },
         };
 
-        if (externalProcesses[name].pm2!==false){
+        if (externalProcesses[name].pm2proc!==false){
           return Object.assign({}, procStatus, externalProcesses[name]);
         }else{
           return procStatus;
@@ -79,7 +79,7 @@ module.exports={
   },
   start:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2===false){
+    if (externalProcesses[id].pm2proc===false){
       return externalProcesses[id].start();
     }else{
       return pm2wrapper.start(externalProcesses[id]);
@@ -87,7 +87,7 @@ module.exports={
   },
   stop:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2===false){
+    if (externalProcesses[id].pm2proc===false){
       return externalProcesses[id].stop();
     }else{
       return pm2wrapper.stop(id);
@@ -95,15 +95,21 @@ module.exports={
   },
   restart:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2===false){
+    if (externalProcesses[id].pm2proc===false){
       return externalProcesses[id].restart();
     }else{
-      return pm2wrapper.restart(id);
+      return pm2wrapper.restart(id).catch((err)=>{
+        if (err.message==='process name not found'){
+          return pm2wrapper.start(externalProcesses[id]);
+        }else{
+          throw err;
+        }
+      });
     }
   },
   delete:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2===false){
+    if (externalProcesses[id].pm2proc===false){
       return externalProcesses[id].delete();
     }else{
       return pm2wrapper.delete(id);
@@ -111,7 +117,7 @@ module.exports={
   },
   describe:id=>{
     const externalProcesses = utils.getExternalProcesses();
-    if (externalProcesses[id].pm2===false){
+    if (externalProcesses[id].pm2proc===false){
       return externalProcesses[id].describe().catch(err=>{
         console.error(`error getting described details of external process "${id}":`, err);
         return [];

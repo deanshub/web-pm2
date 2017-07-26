@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 module.exports = {
-  pm2: true,
+  pm2proc: true,
   name: 'nginx',
   cwd: '../prismWeb/nginx',
   script: 'wrapper.js',

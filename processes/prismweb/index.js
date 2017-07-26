@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 module.exports = {
-  pm2: true,
+  pm2proc: true,
   name: 'prismweb',
   cwd: '../prismweb/Prism.Web.Service.Console/bin/Debug',
   script: 'wrapper.js',

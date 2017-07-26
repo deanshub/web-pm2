@@ -1,5 +1,5 @@
 module.exports = {
-  pm2: true,
+  pm2proc: true,
   name: 'mongo',
   cwd: '../prismweb/MaestroWebApp/vnext',
   script: 'mongoStarter.js',
