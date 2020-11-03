@@ -6,67 +6,71 @@ import classnames from 'classnames';
 import style from './style.css';
 
 export default class LogDialog extends Component {
-  static propTypes={
+  static propTypes = {
     configurationDialogOpen: PropTypes.bool,
     handleClose: PropTypes.func,
     configurationDetails: PropTypes.object,
     processId: PropTypes.string,
     setConfiguration: PropTypes.func,
-  }
-  static defaultProps={
+  };
+  static defaultProps = {
     configurationDialogOpen: false,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.configurationDetails={};
+    this.configurationDetails = {};
   }
 
-  prepareForm(configurationDetails){
+  prepareForm(configurationDetails) {
     let textFileds = [];
-    if (configurationDetails){
+    if (configurationDetails) {
       for (let prop in configurationDetails) {
         textFileds.push(
           <TextField
-              defaultValue={configurationDetails[prop]}
-              floatingLabelText={prop}
-              fullWidth
-              key={prop}
-              multiLine
-              onChange={(event)=>{
-                this.configurationDetails[prop] = event.target.value;
-              }}
-          />
+            defaultValue={configurationDetails[prop]}
+            floatingLabelText={prop}
+            fullWidth
+            key={prop}
+            multiLine
+            onChange={(event) => {
+              this.configurationDetails[prop] = event.target.value;
+            }}
+          />,
         );
       }
     }
     return textFileds;
   }
 
-  render(){
-    const {configurationDialogOpen, handleClose, configurationDetails, processId, setConfiguration} = this.props;
+  render() {
+    const {
+      configurationDialogOpen,
+      handleClose,
+      configurationDetails,
+      processId,
+      setConfiguration,
+    } = this.props;
     const actions = [
       <FlatButton
-          label="Update & Don't Restart"
-          onTouchTap={()=>setConfiguration(processId, this.configurationDetails)}
+        label="Update & Don't Restart"
+        onTouchTap={() =>
+          setConfiguration(processId, this.configurationDetails)
+        }
       />,
-      <FlatButton
-          label="Cancel"
-          onTouchTap={handleClose}
-          primary
-      />,
+      <FlatButton label="Cancel" onTouchTap={handleClose} primary />,
     ];
 
     return (
       <Dialog
-          actions={actions}
-          autoScrollBodyContent
-          className={classnames(style.dialogWrapper)}
-          contentStyle={{width: '70vw', maxWidth:'none'}}
-          modal={false}
-          onRequestClose={handleClose}
-          open={configurationDialogOpen}
-          title={`Configure - ${processId}`}
+        actions={actions}
+        autoScrollBodyContent
+        className={classnames(style.dialogWrapper)}
+        contentStyle={{ width: '70vw', maxWidth: 'none' }}
+        modal={false}
+        onRequestClose={handleClose}
+        open={configurationDialogOpen}
+        title={`Configure - ${processId}`}
       >
         <div className={classnames(style.dialogRoot)}>
           {this.prepareForm(configurationDetails)}

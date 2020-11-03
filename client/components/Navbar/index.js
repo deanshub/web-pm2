@@ -26,15 +26,12 @@ class Navbar extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <AppBar
-            iconElementRight={
-              <IconButton
-                  onTouchTap={refreshStats}
-                  tooltip="Refresh"
-              >
-                <Refresh/>
-              </IconButton>
-            }
-            title={title}
+          iconElementRight={
+            <IconButton onTouchTap={refreshStats} tooltip="Refresh">
+              <Refresh />
+            </IconButton>
+          }
+          title={title}
         />
       </MuiThemeProvider>
     );

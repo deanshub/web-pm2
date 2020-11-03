@@ -1,5 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import {
+  Toolbar,
+  ToolbarGroup,
+  ToolbarSeparator,
+  ToolbarTitle,
+} from 'material-ui/Toolbar';
 import { TextField, IconMenu, RaisedButton, MenuItem } from 'material-ui';
 import { IconButton } from 'material-ui';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
@@ -19,13 +24,13 @@ import FormatAlignJustify from 'material-ui/svg-icons/editor/format-align-justif
 class GeneralToolbar extends Component {
   static propTypes = {
     rowSelected: PropTypes.bool,
-  }
+  };
 
-  static defaultProps={
+  static defaultProps = {
     rowSelected: false,
-  }
+  };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       openMenu: false,
@@ -36,54 +41,42 @@ class GeneralToolbar extends Component {
     this.setState({
       openMenu: true,
     });
-  }
+  };
 
   render() {
     const { rowSelected } = this.props;
-    
+
     return (
       <Toolbar>
         <ToolbarGroup>
           <ToolbarTitle text="Search" />
           <TextField hintText="Search Pattern" />
         </ToolbarGroup>
-        <ToolbarGroup >
-          <IconButton
-              disabled={!rowSelected}
-              tooltip="Stop"
-          >
+        <ToolbarGroup>
+          <IconButton disabled={!rowSelected} tooltip="Stop">
             <AvStop />
           </IconButton>
-          <IconButton
-              disabled={!rowSelected}
-              tooltip="Restart"
-          >
+          <IconButton disabled={!rowSelected} tooltip="Restart">
             <AvReplay />
           </IconButton>
-          <IconButton
-              disabled={!rowSelected}
-              tooltip="Delete"
-          >
+          <IconButton disabled={!rowSelected} tooltip="Delete">
             <ActionsDelete />
           </IconButton>
-          <IconButton
-              disabled={!rowSelected}
-              tooltip="Logs"
-          >
+          <IconButton disabled={!rowSelected} tooltip="Logs">
             <FormatAlignJustify />
           </IconButton>
           <ToolbarSeparator />
           <IconMenu
-              iconButtonElement={
-                <RaisedButton
-                    icon={<NavigationExpandMoreIcon />}
-                    label="Actions"
-                    labelPosition="before"
-                    onTouchTap={this.handleOpenMenu}
-                    primary
-                />
-              }
-              open={this.state.openMenu}
+            iconButtonElement={
+              <RaisedButton
+                icon={<NavigationExpandMoreIcon />}
+                label="Actions"
+                labelPosition="before"
+                onTouchTap={this.handleOpenMenu}
+                primary
+              />
+            }
+            open={this.state.openMenu}
           >
             <MenuItem primaryText="Start/Restart All" />
             <MenuItem primaryText="Stop All" />
