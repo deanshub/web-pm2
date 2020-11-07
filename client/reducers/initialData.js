@@ -1,3 +1,2 @@
-let initialData = [
-]
-export default initialData
+let initialData = [];
+export default initialData;

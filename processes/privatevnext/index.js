@@ -8,14 +8,14 @@ module.exports = {
   error_file: 'logs/vnext.stderr.log',
   out_file: 'logs/vnext.stdout.log',
   pid_file: 'logs/vnext.pid',
-  env:{
+  env: {
     NODE_ENV: 'development',
   },
-  env_production : {
+  env_production: {
     NODE_ENV: 'production',
   },
   max_memory_restart: '500M',
   instances: 1,
-  autorestart : true,
+  autorestart: true,
   restart_delay: 4000,
 };
