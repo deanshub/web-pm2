@@ -69,16 +69,13 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader:'babel',
-        loaders: [
-          'react-hot',
-          'babel',
-        ],
+        loader: 'babel',
+        loaders: ['react-hot', 'babel'],
       },
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx','.sass','.scss'],
+    extensions: ['', '.js', '.jsx', '.sass', '.scss'],
   },
   postcss: [
     rucksack({
@@ -88,7 +85,9 @@ module.exports = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development') },
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      },
     }),
   ],
   devServer: {

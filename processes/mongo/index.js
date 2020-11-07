@@ -8,7 +8,7 @@ module.exports = {
   error_file: 'logs/mongo.stderr.log',
   out_file: 'logs/mongo.stdout.log',
   pid_file: 'logs/mongo.pid',
-  env:{
+  env: {
     NODE_ENV: 'development',
   },
   env_production: {

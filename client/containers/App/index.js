@@ -11,28 +11,29 @@ class App extends Component {
     params: PropTypes.object,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      stat:{},
+      stat: {},
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.refreshStats();
   }
 
-  refreshStats(){
-    request.get('/api/serverStat')
-    .set('Accept', 'application/json')
-    .end((err, res)=>{
-      console.log(res?res.body:err);
-      if (!err){
-        this.setState({
-          stat: res.body,
-        });
-      }
-    });
+  refreshStats() {
+    request
+      .get('/api/serverStat')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        console.log(res ? res.body : err);
+        if (!err) {
+          this.setState({
+            stat: res.body,
+          });
+        }
+      });
   }
   render() {
     const { children, params } = this.props;
@@ -41,12 +42,12 @@ class App extends Component {
 
     return (
       <div>
-        <Navbar
-            refreshStats={::this.refreshStats}
-            title={params.userId}
-        />
+        <Navbar refreshStats={::this.refreshStats} title={params.userId} />
         <div className={classnames([style.mainsection])}>
-          {React.cloneElement(children, { refreshStats: ::this.refreshStats, stat })}
+          {React.cloneElement(children, {
+            refreshStats: ::this.refreshStats,
+            stat,
+          })}
         </div>
       </div>
     );

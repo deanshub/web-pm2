@@ -1,5 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import classnames from 'classnames';
 
 import dateFilter from '../../utils/dateFilter';
@@ -11,14 +18,14 @@ class ProcessTable extends Component {
     processes: PropTypes.array,
     searchText: PropTypes.string,
     selectedRow: PropTypes.object,
-  }
+  };
 
-  static defaultProps={
-    processes:[],
-    searchText:'',
-  }
+  static defaultProps = {
+    processes: [],
+    searchText: '',
+  };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       openMenu: false,
@@ -29,13 +36,17 @@ class ProcessTable extends Component {
     this.setState({
       openMenu: true,
     });
-  }
+  };
 
   render() {
     const { processes, searchText, selectedRow, onRowSelection } = this.props;
 
     return (
-      <Table onRowSelection={(rowIndex)=>{onRowSelection(processes[rowIndex]);}}>
+      <Table
+        onRowSelection={(rowIndex) => {
+          onRowSelection(processes[rowIndex]);
+        }}
+      >
         <TableHeader>
           <TableRow>
             <TableHeaderColumn>PM2 ID</TableHeaderColumn>
@@ -51,39 +62,51 @@ class ProcessTable extends Component {
             <TableHeaderColumn>CPU</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody
-            deselectOnClickaway={false}
-            showRowHover
-        >
-          {
-            processes
-            .filter((process)=>process.name.includes(searchText)||process.pm_id.toString().includes(searchText))
-            .map(process=>{
+        <TableBody deselectOnClickaway={false} showRowHover>
+          {processes
+            .filter(
+              (process) =>
+                process.name.includes(searchText) ||
+                process.pm_id.toString().includes(searchText),
+            )
+            .map((process) => {
               const statusClass = classnames({
-                [style.online]:process.pm2_env.status==='online',
-                [style.notonline]:process.pm2_env.status!=='online',
-                [style.capitalize]:true,
+                [style.online]: process.pm2_env.status === 'online',
+                [style.notonline]: process.pm2_env.status !== 'online',
+                [style.capitalize]: true,
               });
               return (
-                <TableRow
-                    key={process.name}
-                    selected={process===selectedRow}
-                >
+                <TableRow key={process.name} selected={process === selectedRow}>
                   <TableRowColumn>{process.pm_id}</TableRowColumn>
                   <TableRowColumn>{process.name}</TableRowColumn>
                   <TableRowColumn>{process.pm2_env.exec_mode}</TableRowColumn>
                   <TableRowColumn>{process.pid}</TableRowColumn>
-                  <TableRowColumn className={statusClass}>{process.pm2_env.status}</TableRowColumn>
-                  <TableRowColumn>{dateFilter(process.pm2_env.pm_uptime - process.pm2_env.created_at,'HH:mm:ss')}</TableRowColumn>
-                  <TableRowColumn>{process.pm2_env.restart_time}</TableRowColumn>
-                  <TableRowColumn>{process.pm2_env.unstable_restarts}</TableRowColumn>
-                  <TableRowColumn>{dateFilter(process.pm2_env.created_at, 'YYYY-MM-D HH:mm:ss')}</TableRowColumn>
+                  <TableRowColumn className={statusClass}>
+                    {process.pm2_env.status}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {dateFilter(
+                      process.pm2_env.pm_uptime - process.pm2_env.created_at,
+                      'HH:mm:ss',
+                    )}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {process.pm2_env.restart_time}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {process.pm2_env.unstable_restarts}
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    {dateFilter(
+                      process.pm2_env.created_at,
+                      'YYYY-MM-D HH:mm:ss',
+                    )}
+                  </TableRowColumn>
                   <TableRowColumn>{process.monit.memory}</TableRowColumn>
                   <TableRowColumn>{process.monit.cpu}</TableRowColumn>
                 </TableRow>
               );
-            })
-          }
+            })}
         </TableBody>
       </Table>
     );

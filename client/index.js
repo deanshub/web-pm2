@@ -18,19 +18,11 @@ injectTapEventPlugin();
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route
-          component={App}
-      >
-        <Route
-            component={HomePage}
-            path="/"
-        />
-        <Route
-            component={HomePage}
-            path="/app/:pm2Id"
-        />
+      <Route component={App}>
+        <Route component={HomePage} path="/" />
+        <Route component={HomePage} path="/app/:pm2Id" />
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

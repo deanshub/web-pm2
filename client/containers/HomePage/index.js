@@ -22,21 +22,20 @@ class HomePage extends Component {
   static propTypes = {
     refreshStats: PropTypes.func,
     stat: PropTypes.object,
-  }
+  };
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
-  handleRowSelection(selectedRows){
+  handleRowSelection(selectedRows) {
     this.setState({
       rowSelected: selectedRows,
     });
   }
 
-  handleSearch(searchText){
+  handleSearch(searchText) {
     this.setState({
       searchText,
     });
@@ -56,15 +55,15 @@ class HomePage extends Component {
         <MuiThemeProvider muiTheme={muiTheme}>
           <Paper className={classnames(style.chartItem)}>
             <ActionToolbar
-                handleSearch={::this.handleSearch}
-                refreshStats={refreshStats}
-                rowSelected={rowSelected}
+              handleSearch={::this.handleSearch}
+              refreshStats={refreshStats}
+              rowSelected={rowSelected}
             />
             <ProcessTable
-                onRowSelection={::this.handleRowSelection}
-                selectedRow={rowSelected}
-                searchText={searchText}
-                {...stat}
+              onRowSelection={::this.handleRowSelection}
+              selectedRow={rowSelected}
+              searchText={searchText}
+              {...stat}
             />
           </Paper>
         </MuiThemeProvider>
